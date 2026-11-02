@@ -1,0 +1,80 @@
+# OP-XY Conductor
+
+A generative sequencer for the Teenage Engineering OP-XY, on the
+[Open-XY SDK](https://github.com/etcetc000/open-xy). It sits on aux track 12
+(CV) and plays eight lanes (drums, bass, chords, pads, arps and leads) live on
+instrument tracks 1-8 while the sequencer runs.
+
+![Conductor's four pages: M1 the song, M2 the lanes, M3 the selected lane, M4 the routes](docs/screens.png)
+
+- **One song, eight parts.** Every lane follows one chord progression, set by
+  the key, scale and progression, and one groove of kicks, backbeats and
+  accents, so the parts fit together.
+- **It evolves.** The song changes a little each four-bar phrase, as far as
+  **evolve** allows. Freeze it when you like what you hear. Notes are a pure
+  function of the song, the controls and the bar, so it replays the same until
+  something changes.
+- **It plays, it doesn't record.** Notes go to each track's machine as the
+  sequencer plays; nothing is written into the tracks' steps. Stopped, the song
+  waits at its start.
+
+**Status:** experimental. It runs on an OP-XY on OS 1.2.1 with a development
+build of the SDK (see [What you need](#what-you-need)), not on stock firmware.
+
+## Using it
+
+On track 12, Shift + M1 opens the engine list: choose Conductor, then press
+play. M1-M4 open its four pages, named along the bottom of the screen. Press
+any encoder to switch between a page's two rows.
+
+| Page | Encoders | Screen |
+| --- | --- | --- |
+| M1 conductor | key, scale, prog, dens / cmplx, hrate, swing, evolve | The chord wheel, the progression, the phrase's groove and each lane playing |
+| M2 lanes | lane, role, dens, oct / vel, vary, lock, gate | Every lane's bar, accents brightest |
+| M3 lane | the selected lane's role controls: a bass's style, an arp's mode, a chord's voicing… | The selected lane's notes, on twelve rows labelled with their range |
+| M4 route | lane, track, xpose, mute / low, high | Which track each lane plays; muted lanes struck through |
+
+M1's controls are saved, sequenced and lockable like any track's. Shift +
+encoders 1-4 reroll, freeze, fill and vary: every lane on M1, the selected
+lane on M2-M4. Freeze holds the current phrase; turn it back to release it.
+
+Lanes, roles, routes and the seed are saved with the project. The presets are
+Pop, Night and Jazz.
+
+## What you need
+
+Conductor uses SDK features that are not in `staging` yet:
+
+- Track-control notes and taking the encoders (`sdk/control-notes`).
+- M1-M4 as page keys on a machine that hides pages. This is on a local branch
+  and still needs its pull request.
+- `hidePages`, so `machine.json` declares `"sdk": "1.8"`.
+
+## Development
+
+```sh
+python ../open-xy/sdk.py test --machine .
+python tools/artwork.py   # after changing a node's shape or slot
+XY_FONT=/path/to/UniversNextPro-Light.ttf python tools/screens/screens.py --sdk ../open-xy   # docs/ screenshots
+```
+
+- `generator.h`: the generator, integer-only and within 32 bits.
+- `specs.h`: the pages' controls and musical vocabulary.
+- `control.cpp`: playback, encoders and saved data.
+- `words.h`: what the control tells the display each tick, laid out by page.
+- `display.cpp`: the pages.
+- `tools/screens/`: renders the pages from the control and display code.
+
+The engine is silent: Conductor plays other tracks' machines. The screenshots
+need the OP-XY's screen font, which is never committed here.
+
+## Limits
+
+- Roles are set per lane: the OP-XY doesn't tell a machine which tracks hold
+  drums.
+- Notes start on GUI ticks, so timing can jitter by up to one tick. This is
+  not yet measured on the device.
+- M1-M4 are polled each GUI tick, so a press shorter than one tick can be
+  missed.
+- Lanes play instrument tracks 1-8 only; there is no MIDI routing of its own.
+- M3 shows the current bar, not the whole phrase.

@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "sdk": "1.8",
+  "kind": "synth",
+  "description": "Generative sequencer: drums, bass, chords, pads, arps and leads on tracks 1-8, from aux track 12"
+}

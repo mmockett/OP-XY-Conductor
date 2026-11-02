@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "id": "conductor",
+  "name": "Conductor",
+  "hidePages": [
+    "envelope",
+    "filter",
+    "lfo"
+  ],
+  "parameters": [
+    {
+      "id": "key",
+      "label": "Key",
+      "default": 0.0417,
+      "mapping": {
+        "kind": "enum",
+        "labels": [
+          "C",
+          "Db",
+          "D",
+          "Eb",
+          "E",
+          "F",
+          "Gb",
+          "G",
+          "Ab",
+          "A",
+          "Bb",
+          "B"
+        ]
+      },
+      "display": "enum"
+    },
+    {
+      "id": "scale",
+      "label": "Scale",
+      "default": 0.0714,
+      "mapping": {
+        "kind": "enum",
+        "labels": [
+          "maj",
+          "min",
+          "dor",
+          "phr",
+          "lyd",
+          "mix",
+          "hmin"
+        ]
+      },
+      "display": "enum"
+    },
+    {
+      "id": "prog",
+      "label": "Prog",
+      "default": 0.0833,
+      "mapping": {
+        "kind": "enum",
+        "labels": [
+          "pop",
+          "minor",
+          "mode",
+          "drone",
+          "jazz",
+          "walk"
+        ]
+      },
+      "display": "enum"
+    },
+    {
+      "id": "dens",
+      "label": "Dens",
+      "default": 0.5,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "cmplx",
+      "label": "Cmplx",
+      "control": 0,
+      "default": 0.4,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "hrate",
+      "label": "Hrate",
+      "control": 1,
+      "default": 0.375,
+      "mapping": {
+        "kind": "enum",
+        "labels": [
+          "0.5 bar",
+          "1 bar",
+          "2 bars",
+          "4 bars"
+        ]
+      },
+      "display": "enum"
+    },
+    {
+      "id": "swing",
+      "label": "Swing",
+      "control": 2,
+      "default": 0,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    },
+    {
+      "id": "evolve",
+      "label": "Evolve",
+      "control": 3,
+      "default": 0.3,
+      "mapping": {
+        "kind": "linear",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "display": "percent"
+    }
+  ],
+  "presets": {
+    "Pop": {
+      "key": 0.0417,
+      "scale": 0.0714,
+      "prog": 0.0833,
+      "dens": 0.5,
+      "cmplx": 0.4,
+      "hrate": 0.375,
+      "swing": 0,
+      "evolve": 0.3
+    },
+    "Night": {
+      "key": 0.7917,
+      "scale": 0.2143,
+      "prog": 0.25,
+      "dens": 0.35,
+      "cmplx": 0.55,
+      "hrate": 0.625,
+      "swing": 0.3,
+      "evolve": 0.2
+    },
+    "Jazz": {
+      "key": 0.4583,
+      "scale": 0.0714,
+      "prog": 0.75,
+      "dens": 0.6,
+      "cmplx": 0.75,
+      "hrate": 0.375,
+      "swing": 0.55,
+      "evolve": 0.4
+    }
+  },
+  "resources": {
+    "voiceBytes": 4,
+    "voiceAlignment": 4,
+    "voiceCapacity": 1,
+    "sharedBytes": 0,
+    "outputPeakQ31": 1073741824,
+    "display": {
+      "stateBytes": 36,
+      "stateAlignment": 4,
+      "paths": 0,
+      "points": 0,
+      "nodes": 234,
+      "texts": 32,
+      "palette": 16
+    },
+    "trackControl": {
+      "stateBytes": 2192,
+      "stateAlignment": 4,
+      "unique": true,
+      "aux": [
+        12
+      ],
+      "savedBytes": 572
+    }
+  },
+  "press": "page"
+}
