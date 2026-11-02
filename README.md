@@ -43,12 +43,14 @@ Pop, Night and Jazz.
 
 ## What you need
 
-Conductor uses SDK features that are not in `staging` yet:
+Conductor uses SDK features that are not in `staging` yet; open-xy
+[#345](https://github.com/etcetc000/open-xy/issues/345) tracks them:
 
-- Track-control notes and taking the encoders (`sdk/control-notes`).
-- M1-M4 as page keys on a machine that hides pages. This is on a local branch
-  and still needs its pull request.
-- `hidePages`, so `machine.json` declares `"sdk": "1.8"`.
+- Track control ([#198](https://github.com/etcetc000/open-xy/pull/198)) and
+  machines on track 12 ([#234](https://github.com/etcetc000/open-xy/pull/234)),
+  so `machine.json` declares `"sdk": "1.8"`.
+- Track-control notes, the machine's own encoders and sixteen display words
+  ([`sdk/control-notes`](https://github.com/mmockett/open-xy/tree/sdk/control-notes)).
 
 ## Development
 
