@@ -6,38 +6,41 @@ namespace conductor {
 using namespace opxy::draw;
 
 // One layout on every page, left to right: the lanes' labels, their bars
-// (x 86..410), wires, then the tracks they play (x 446). Eight rows, one a
-// lane, at the same height on every page.
+// (x 86..386), wires, then where they play: tracks (x 426) and MIDI channels
+// (x 452), which stay dim until the SDK can send to them. Eight rows, one a
+// lane, at the same height on every page; M3 gives them to the selected
+// lane's own voices or notes.
 //
 // Node slots, in tools/artwork.py's shapes.
 enum Node {
     kBar = 0,            // 8: the two-row header's stepped bar
     kPageMark = 8,       // under the shown page's label
-    kTrackBoxes = 9,     // 8: tracks 1..8, down the right
-    kWires = 17,         // 8: each lane to its track, a line turned and scaled
-    kAccent = 25,        // M2..M4: beside the selected lane
-    kRowBand = 26,       // M2..M4: behind the selected lane
-    kBarBand = 27,       // M1: behind the bar playing
-    kStepBand = 28,      // M2, M3: behind the step playing
-    kGridLines = 29,     // 3: between bars or beats; M4's octave guides
-    kPlayhead = 32,      // M1
-    kPlayMark = 33,      // M1: the playhead's head
-    kUnderlines = 34,    // 4: M1, under each bar's chords
-    kChordMarks = 38,    // 4: M1, under the sounding chord: a phrase, half, a bar, half a bar long
-    kChordTicks = 42,    // 4: M1, where chords change mid-bar
-    kMeter = 46,         // 5: M1, how far the next phrase will change
-    kGrooveMarks = 51,   // 16: M1 by beat, M2 by step
-    kOffbeats = 67,      // 16: M1, the swung off-beats; M2, accents
-    kScaleLine = 83,     // M4: the keyboard's span
-    kToneLines = 84,     // 6: M3, the chord's notes
-    kCells = 90,         // 128: a lane's beat, step or note, or a stretch of its range
-    kNodes = 218,
+    kWires = 9,          // 8: each lane to its track, a line turned and scaled, under the boxes
+    kTrackBoxes = 17,    // 8: tracks 1..8, down the right
+    kMidiBoxes = 25,     // 8: MIDI channels 1..8, beside them
+    kAccent = 33,        // M2, M4: beside the selected lane
+    kRowBand = 34,       // M2, M4: behind the selected lane
+    kBarBand = 35,       // M1: behind the bar playing
+    kStepBand = 36,      // M2, M3: behind the step playing
+    kGridLines = 37,     // 3: between bars or beats; M4's octave guides
+    kPlayhead = 40,      // M1
+    kPlayMark = 41,      // M1: the playhead's head
+    kUnderlines = 42,    // 4: M1, under each bar's chords
+    kChordMarks = 46,    // 4: M1, under the sounding chord: a phrase, half, a bar, half a bar long
+    kChordTicks = 50,    // 4: M1, where chords change mid-bar
+    kMeter = 54,         // 5: M1, how far the next phrase will change
+    kGrooveMarks = 59,   // 16: M1 by beat, M2 by step
+    kOffbeats = 75,      // 16: M1, the swung off-beats; M2, accents
+    kScaleLine = 91,     // M4: the keyboard's span
+    kToneLines = 92,     // 6: M3, the chord's notes
+    kCells = 98,         // 128: a lane's beat, step or note, or a stretch of its range
+    kNodes = 226,
 };
 const u32 kCellCount = kNodes - kCells;
 // Text slots: the header's sixteen, then the pages' own. Each slot has its
 // own colour in the artwork; a size is the slot's own times the scale.
 enum Text {
-    kLaneText = 16,      // 8 at 10 px, light: each lane's role and style
+    kLaneText = 16,      // 8 at 10 px, light: each lane's role and style; M3, the lane's voices or notes
     kBrightText = 24,    // 10 px, white: the selected lane's label, or M1's next phrase
     kBigText = 25,       // 15 px, white: the phrase or the bar
     kChordText = 26,     // 12 px, white: the sounding chord
@@ -59,10 +62,16 @@ static const u8 kGlyphWidths[95] = {
     57, 24, 24, 51, 24, 89, 57, 57, 58, 58, 34, 48, 32, 57, 51, 82, 51, 51, 44, 38, 25, 38, 68};
 
 // Geometry, Q10 pixels.
-const i32 kLeft = 86 * unit, kSpan = 324 * unit, kBeat = 20736;  // 20.25 px: a beat of the phrase, a step of a bar
-const i32 kWireX = 414 * unit, kTrackX = 446 * unit;
+const i32 kLeft = 86 * unit, kSpan = 300 * unit, kBeat = 19200;  // 18.75 px: a beat of the phrase, a step of a bar
+const i32 kBarWidth = kSpan / 4;
+const i32 kWireX = 390 * unit, kTrackX = 426 * unit, kMidiX = 452 * unit;
 inline i32 px(i32 pixels) { return pixels * unit; }
 inline i32 row_y(u32 row) { return px(82) + static_cast<i32>(row) * 14746; }  // 14.4 px apart
+// M3's rows: twelve notes a semitone apart, low at the bottom, or the eight
+// drum voices, kick at the top. The wire to the track leaves from the middle.
+const i32 kRollBottom = 186 * unit, kNotePitch = 103 * unit / 10, kDrumTop = 775 * unit / 10, kDrumPitch = 155 * unit / 10;
+const i32 kRollMiddle = (kDrumTop + kRollBottom) / 2;
+static const char* const kVoiceNames[kDrumRows] = {"kick", "snare", "clap", "rim", "hat", "open hat", "tom", "low tom"};
 
 inline void park_text(Frame& frame, u32 slot) { text(frame, slot, px(hidden_x), px(hidden_y), unit, ""); }
 inline void show(Frame& frame, u32 node, i32 x, i32 y, u32 shade, i32 scale = unit) {
@@ -115,17 +124,25 @@ inline void global_text(char* out, u32 slot, i32 v) {
     copy(out, header_capacity, name);
 }
 
-// The header's titles and values by slot: the page's controls, or on Shift the
-// actions encoders 1..4 take, on both rows.
+// The header row being edited: the second once an encoder press has moved
+// any position to its alternate, as page_header works it out.
+inline u32 header_row(const Input& input) {
+    for (u32 col = 0; col < 4; ++col)
+        if (input.shown[col] == page_header_slots[1][col]) return 1;
+    return 0;
+}
+
+// The header's titles and values by slot: the page's controls, or on Shift
+// the actions encoders 1..4 take, on the row being edited.
 inline void header_captions(const Input& input, const u32* w, const char* (&titles)[8],
                             char (&values)[8][header_capacity]) {
     const u32 page = field(w[kState], 0, 2), lane = field(w[kState], 2, 3);
     const bool shift = field(w[kState], 5, 1) != 0, all = page == kConduct;
-    const u32 role = field(w[kRolesWord], 3 * lane, 3);
+    const u32 role = field(w[kRolesWord], 3 * lane, 3), row = header_row(input);
     for (u32 slot = 0; slot < 8; ++slot) {
         char* value = values[slot];
         value[0] = 0;
-        if (shift) {
+        if (shift && slot / 4 == row) {
             const u32 action = slot % 4;
             titles[slot] = kActions[action];
             if (action == 0 && all) hex4(value, field(w[kSeed], 0, 16));
@@ -164,30 +181,35 @@ inline u32 time_shade(const View& v, u32 lane, bool past, bool now, bool this_ba
 }
 
 // "2 bass fifth": the lane, its role and its style.
+inline void lane_name(const View& v, u32 l, char (&line)[text_capacity]) {
+    u32 n = 0;
+    line[0] = 0;
+    append_number(line, n, static_cast<i32>(l) + 1);
+    append(line, n, " ");
+    const u32 role = v.role(l);
+    append(line, n, kRoleNames[role]);
+    if (role > kDrum) {
+        const Spec& s = kDetailSpecs[role - 1][0];
+        if (s.format == kChoice) {
+            char style[8];
+            format(style, s, static_cast<i32>(lane_style(v.w, l)));
+            append(line, n, " ");
+            append(line, n, style);
+        }
+    }
+}
+
+// Every lane down the left. M3 gives the rows to the selected lane instead.
 inline void lane_labels(const View& v, Frame& frame) {
+    if (v.page == kDetail) return;
     for (u32 l = 0; l < kLanes; ++l) {
         char line[text_capacity];
-        u32 n = 0;
-        line[0] = 0;
-        append_number(line, n, static_cast<i32>(l) + 1);
-        append(line, n, " ");
-        const u32 role = v.role(l);
-        append(line, n, kRoleNames[role]);
-        if (role > kDrum) {
-            const Spec& s = kDetailSpecs[role - 1][0];
-            if (s.format == kChoice) {
-                char style[8];
-                format(style, s, static_cast<i32>(lane_style(v.w, l)));
-                append(line, n, " ");
-                append(line, n, style);
-            }
-        }
+        lane_name(v, l, line);
         const i32 y = row_y(l) + px(35) / 10;
         if (v.picks() && l == v.selected) {
             text(frame, kBrightText, px(10), y, unit, line);
             show(frame, kAccent, px(3), row_y(l) - px(6), kWhite);
-            // M3 draws the lane's own notes across the rows, so no band there.
-            if (v.page != kDetail) show(frame, kRowBand, kLeft, row_y(l) - px(7), kRow);
+            show(frame, kRowBand, kLeft, row_y(l) - px(7), kRow);
         } else {
             text(frame, kLaneText + l, px(10), y, unit, line);
         }
@@ -195,8 +217,12 @@ inline void lane_labels(const View& v, Frame& frame) {
 }
 
 // Tracks down the right, each lane wired to its own. On M1 and M2 a track
-// lights while a lane plays it; on M3 and M4 the selected lane's is lit.
+// lights while a lane plays it; on M3 and M4 the selected lane's is lit. M3
+// wires only the selected lane, from the middle of its notes. MIDI channels
+// sit beside the tracks, outlined in the dimmest grey: nothing can play them
+// until the SDK sends notes over MIDI.
 inline void routing(const View& v, const DisplayState& state, Frame& frame) {
+    for (u32 c = 0; c < kLanes; ++c) show(frame, kMidiBoxes + c, kMidiX, row_y(c) - px(55) / 10, kRingRule);
     u32 used = 0, muted_only = 0, lit = 0;
     for (u32 l = 0; l < kLanes; ++l) {
         if (v.role(l) == kOff) continue;
@@ -210,20 +236,21 @@ inline void routing(const View& v, const DisplayState& state, Frame& frame) {
         show(frame, kTrackBoxes + t, kTrackX, row_y(t) - px(55) / 10, shade);
     }
     for (u32 l = 0; l < kLanes; ++l) {
-        if (v.role(l) == kOff) continue;
+        if (v.role(l) == kOff || (v.page == kDetail && l != v.selected)) continue;
         // A 60 px line from the lane's row to its track's, turned and scaled.
-        const i32 dx = 300, dy = (row_y(v.target(l)) - row_y(l)) * 10 / unit;  // tenths of a pixel
+        const i32 from = v.page == kDetail ? kRollMiddle : row_y(l);
+        const i32 dx = (kTrackX - kWireX) * 10 / unit, dy = (row_y(v.target(l)) - from) * 10 / unit;  // tenths of a pixel
         const i32 length = static_cast<i32>(isqrt(static_cast<u32>(dx * dx + dy * dy)));
         const bool lit_wire = v.picks() ? l == v.selected : !v.muted(l) && state.glow[l] > 256;
         const u32 shade = v.muted(l) ? kMuted : lit_wire ? (v.picks() ? kWhite : kLight) : kDim;
-        show(frame, kWires + l, kWireX, row_y(l), shade, length * unit / 600);
+        show(frame, kWires + l, kWireX, from, shade, length * unit / 600);
         const Turn turn = {dx * unit / length, dy * unit / length};
         opxy::draw::turn(frame, kWires + l, turn);
     }
 }
 
 inline void bar_lines(Frame& frame) {
-    for (u32 b = 1; b < 4; ++b) show(frame, kGridLines + b - 1, kLeft + px(81) * static_cast<i32>(b), px(63), kGrid);
+    for (u32 b = 1; b < 4; ++b) show(frame, kGridLines + b - 1, kLeft + kBarWidth * static_cast<i32>(b), px(63), kGrid);
 }
 
 // One cell from the pool, or none once it is spent.
@@ -244,18 +271,18 @@ inline void draw_conduct(const Input& input, const View& v, Frame& frame) {
     const bool seventh = field(chords, 14, 1) != 0;
     const u32 at = v.bar * kSteps + v.step, now_beat = at / 4;
 
-    show(frame, kBarBand, kLeft + px(81) * static_cast<i32>(v.bar), px(63), kBand);
+    show(frame, kBarBand, kLeft + kBarWidth * static_cast<i32>(v.bar), px(63), kBand);
     bar_lines(frame);
 
     // The chords: as many over the phrase as `hrate` makes, the sounding one
     // underlined white and named, with the next few.
     const u32 rate = kHarmonySteps[global_value(kHarmony, input.slots[kHarmony])];
     const u32 count = 64 / rate, cur = at / rate;
-    for (u32 b = 0; b < 4; ++b) show(frame, kUnderlines + b, kLeft + px(81) * static_cast<i32>(b) + px(2), px(59), kRule);
+    for (u32 b = 0; b < 4; ++b) show(frame, kUnderlines + b, kLeft + kBarWidth * static_cast<i32>(b) + px(2), px(59), kRule);
     const u32 mark = count == 1 ? 0 : count == 2 ? 1 : count == 4 ? 2 : 3;
     show(frame, kChordMarks + mark, kLeft + kSpan / static_cast<i32>(count) * static_cast<i32>(cur) + px(2), px(59), kWhite);
     if (count == 8)
-        for (u32 b = 0; b < 4; ++b) show(frame, kChordTicks + b, kLeft + px(81) * static_cast<i32>(b) + px(405) / 10, px(57), kDim);
+        for (u32 b = 0; b < 4; ++b) show(frame, kChordTicks + b, kLeft + kBarWidth * static_cast<i32>(b) + kBarWidth / 2, px(57), kDim);
     u32 labelled = 0;
     for (u32 i = cur; i < count && labelled < 4; ++i) {
         const i32 degree = static_cast<i32>(field(chords, 3 * ((position + i - cur) % 4), 3));
@@ -371,21 +398,24 @@ inline void draw_lanes(const View& v, Frame& frame) {
     }
 }
 
-// M3: the selected lane's bar, a row a semitone (or a drum voice), over lines
-// at the sounding chord's notes.
+// M3: the selected lane's bar. Its own rows run down the left: a drum lane's
+// voices, kick at the top, or a synth lane's notes, a semitone a row (the
+// naturals named), over lines at the sounding chord's notes. The lane, the
+// chord and the bar sit above; one wire takes it all to the lane's track.
 inline void draw_roll(const Input& input, const View& v, Frame& frame) {
     const u32* w = v.w;
     const u32 lane = v.selected;
     char line[text_capacity];
+    lane_name(v, lane, line);
+    text(frame, kBrightText, px(10), px(55), unit, line);
+    show(frame, kAccent, px(3), px(49), kWhite);
     u32 n = 0;
-    number(line, static_cast<i32>(v.bar) + 1, false);
-    text(frame, kBigText, px(8), px(56), unit, line);
+    line[0] = 0;
+    append(line, n, "bar ");
+    append_number(line, n, static_cast<i32>(v.bar) + 1);
+    right_text(frame, kMidText + 1, kLeft + kSpan, px(55), line, 11, unit * 9 / 11);
     if (v.role(lane) == kOff) {
-        line[0] = 0;
-        append(line, n, "lane ");
-        append_number(line, n, static_cast<i32>(lane) + 1);
-        append(line, n, " is off: give it a role on M2");
-        text(frame, kMidText, kLeft + px(4), px(55), unit, line);
+        text(frame, kMidText, kLeft + px(4), px(55), unit * 9 / 11, "off: give it a role on M2");
         return;
     }
     const i32 key = global_value(kKey, input.slots[kKey]), scale = global_value(kScale, input.slots[kScale]);
@@ -399,6 +429,7 @@ inline void draw_roll(const Input& input, const View& v, Frame& frame) {
     name[m++] = ' ';
     numeral(name + m, key, scale, degree);
     text(frame, kChordText, kLeft + px(4), px(55), unit, name);
+    n = 0;
     line[0] = 0;
     append(line, n, "next ");
     chord_name(name, key, scale, static_cast<i32>(field(chords, 15, 3)), field(chords, 18, 1) != 0);
@@ -408,18 +439,23 @@ inline void draw_roll(const Input& input, const View& v, Frame& frame) {
     const bool drum = field(w[kRange], 11, 1) != 0;
     const i32 low = static_cast<i32>(field(w[kRange], 0, 7)), band = static_cast<i32>(field(w[kRange], 7, 4));
     const u32 rows = drum ? kDrumRows : kRollRows;
-    const i32 pitch = drum ? px(155) / 10 : px(103) / 10, bottom = px(186);
-    char range[16];
-    n = 0;
-    range[0] = 0;
+    struct Row {
+        bool drum;
+        i32 y(u32 r) const { return drum ? kDrumTop + kDrumPitch * static_cast<i32>(r) : kRollBottom - kNotePitch * static_cast<i32>(r); }
+    } at = {drum};
     if (drum) {
-        append(range, n, "kick to low tom");
+        for (u32 r = 0; r < rows; ++r) text(frame, kLaneText + r, px(10), at.y(r) + px(35) / 10, unit, kVoiceNames[r]);
     } else {
-        note_name(name, low);
-        append(range, n, name);
-        append(range, n, " - ");
-        note_name(name, low + band * static_cast<i32>(rows) - 1);
-        append(range, n, name);
+        // Each natural note named; on a lane wider than an octave, every
+        // other row by its lowest note.
+        u32 labels = 0;
+        for (u32 r = 0; r < rows && labels < kLanes; ++r) {
+            const i32 note = low + band * static_cast<i32>(r);
+            const bool natural = (0xAB5u >> static_cast<u32>(((note % 12) + 12) % 12) & 1) != 0;
+            if (band == 1 ? !natural : r % 2 != 0) continue;
+            note_name(name, note, note_names(key, scale));
+            text(frame, kLaneText + labels++, px(10), at.y(r) + px(35) / 10, unit * 9 / 10, name);
+        }
         // The chord's notes: a line on each row a chord tone falls on.
         u32 tones = 0;
         for (u32 t = 0; t < (seventh ? 4u : 3u); ++t)
@@ -427,9 +463,8 @@ inline void draw_roll(const Input& input, const View& v, Frame& frame) {
         u32 lines = 0;
         for (u32 r = 0; r < rows && lines < 6 && band == 1; ++r)
             if (tones >> static_cast<u32>((low + static_cast<i32>(r)) % 12) & 1)
-                show(frame, kToneLines + lines++, kLeft, bottom - pitch * static_cast<i32>(r), kRule);
+                show(frame, kToneLines + lines++, kLeft, at.y(r), kRule);
     }
-    right_text(frame, kMidText + 1, px(410), px(55), range, 11, unit * 9 / 11);
     show(frame, kStepBand, kLeft + kBeat * static_cast<i32>(v.step), px(63), kRow);
     bar_lines(frame);
     Cells cells = {0};
@@ -437,19 +472,20 @@ inline void draw_roll(const Input& input, const View& v, Frame& frame) {
         for (u32 s = 0; s < kSteps; ++s) {
             if (!bit(w, kRoll, r * kSteps + s)) continue;
             const u32 shade = time_shade(v, lane, s < v.step, s == v.step, true);
-            cells.put(frame, kLeft + kBeat * static_cast<i32>(s) + kBeat / 2, bottom - pitch * static_cast<i32>(r), shade, 1434);
+            cells.put(frame, kLeft + kBeat * static_cast<i32>(s) + kBeat / 2, at.y(r), shade, 1434);
         }
 }
 
 // M4: each lane's range on a keyboard from C1 to C7, in dashes, moved by its
-// transpose (a faint copy marks where it was), and wired to its track.
+// transpose (a faint copy marks where it was), and wired to its track. The
+// MIDI column says it can't play yet.
 inline void draw_route(const View& v, Frame& frame) {
     const u32* w = v.w;
-    const i32 lowest = 24, highest = 96, x0 = px(92), width = px(312);
+    const i32 lowest = 24, highest = 96, x0 = px(92), width = px(288);
     struct Key {
         static i32 x(i32 note, i32 x0, i32 width) { return x0 + width / 72 * (note - 24); }
     };
-    text(frame, kDimText, px(8), px(56), unit, "range");
+    right_text(frame, kDimText, px(474), px(197), "midi: not yet", 9);
     show(frame, kScaleLine, x0, px(58), kMid);
     static const char* const kOctaves[3] = {"C2", "C4", "C6"};
     for (u32 i = 0; i < 3; ++i) {

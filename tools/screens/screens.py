@@ -5,8 +5,9 @@ OP-XY's 480 x 220 (captured at 2x) in the device's font, into docs/.
     XY_FONT=/path/to/UniversNextPro-Light.ttf python3 tools/screens/screens.py --sdk ../open-xy
 
 XY_FONT is the OP-XY's screen font, never committed here. Needs a C++ compiler
-and Google Chrome. Writes docs/m1.png..m4.png, docs/m1-frozen.png, docs/m1-stopped.png
-and docs/screens.png (M1..M4, 2 x 2).
+and Google Chrome. Writes docs/m1.png..m4.png, docs/m1-frozen.png, docs/m1-stopped.png,
+docs/m3-drum.png (M3 on the drum lane), docs/m2-shift.png and docs/m2-shift-row2.png (Shift on
+each header row), and docs/screens.png (M1..M4, 2 x 2).
 """
 import argparse
 import os
@@ -20,7 +21,8 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 # (file, page, selected lane, states): M2..M4 select the arp.
 PAGES = [("m1", 0, 4, []), ("m2", 1, 4, []), ("m3", 2, 4, []), ("m4", 3, 4, []),
-         ("m1-frozen", 0, 4, ["frozen"]), ("m1-stopped", 0, 4, ["stopped"])]
+         ("m1-frozen", 0, 4, ["frozen"]), ("m1-stopped", 0, 4, ["stopped"]), ("m3-drum", 2, 0, []),
+         ("m2-shift", 1, 4, ["shift"]), ("m2-shift-row2", 1, 4, ["shift", "row2"])]
 
 
 def frame_svg(art, dump):

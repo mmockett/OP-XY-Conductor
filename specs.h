@@ -174,10 +174,11 @@ inline void numeral(char* out, i32 key, i32 scale, i32 degree) {
     out[n] = 0;
 }
 
-// "C4", "F#2": MIDI note names.
-inline void note_name(char* out, i32 note) {
+// "C4", "F#2": MIDI note names, spelled with sharps or with `names`
+// (note_names: a key's own spelling).
+inline void note_name(char* out, i32 note, const char* const* names = kNoteNames) {
     u32 n = 0;
-    for (const char* c = kNoteNames[((note % 12) + 12) % 12]; *c; ++c) out[n++] = *c;
+    for (const char* c = names[((note % 12) + 12) % 12]; *c; ++c) out[n++] = *c;
     i32 octave = floor_div(note, 12) - 1;
     if (octave < 0) { out[n++] = '-'; octave = -octave; }
     if (octave >= 10) out[n++] = static_cast<char>('0' + octave / 10);

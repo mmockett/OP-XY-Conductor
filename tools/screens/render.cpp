@@ -1,7 +1,7 @@
 // Runs Conductor's control and display on the host and prints one frame of a
 // page: "n <node> <x> <y> <scale> <cos> <sin> <shade> <paint>" and
 // "t <slot> <x> <y> <scale> <text>", Q10. tools/screens/screens.py draws it.
-//   render <page 0..3> <selected lane 0..7> [stopped] [frozen]
+//   render <page 0..3> <selected lane 0..7> [stopped] [frozen] [shift] [row2]
 #include "control.cpp"
 #include "display.cpp"
 #include <cstdio>
@@ -37,10 +37,12 @@ static void tick(u32 ticks96) {
 int main(int argc, char** argv) {
     const u32 page = argc > 1 ? static_cast<u32>(std::atoi(argv[1])) : 0;
     const u32 lane = argc > 2 ? static_cast<u32>(std::atoi(argv[2])) : 0;
-    bool frozen = false;
+    bool frozen = false, shift = false, row2 = false;
     for (int i = 3; i < argc; ++i) {
         if (!std::strcmp(argv[i], "stopped")) playing = 0;
         if (!std::strcmp(argv[i], "frozen")) frozen = true;
+        if (!std::strcmp(argv[i], "shift")) shift = true;
+        if (!std::strcmp(argv[i], "row2")) row2 = true;
     }
     // C minor, pop, playing bar 2 step 7. Lane 4 (lead) plays track 6 an
     // octave up, muted; lane 6 (pad) plays track 4.
@@ -59,11 +61,13 @@ int main(int argc, char** argv) {
     input.page_key = page + 1;
     const u32 at = kBarTicks + 6 * kTicks;
     for (u32 t = at - 30; t <= at; t += 3) tick(t);
+    input.shift = shift;
+    tick(at);
 
     opxy::draw::Input in;
     std::memset(&in, 0, sizeof in);
     for (u32 i = 0; i < kGlobals; ++i) in.slots[i] = globals[i];
-    for (u32 i = 0; i < 4; ++i) in.shown[i] = static_cast<u8>(i);
+    for (u32 i = 0; i < 4; ++i) in.shown[i] = static_cast<u8>(row2 ? i + 4 : i);
     in.reduced_motion = 1;
     in.elapsed = 34;
     display_reset(display_state);

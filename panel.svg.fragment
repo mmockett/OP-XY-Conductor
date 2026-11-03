@@ -34,56 +34,56 @@
 <path d="M364,203 L476,203 L476,204 L364,204 Z" fill="#3A3A3A"/>
 <text transform="matrix(1 0 0 1 366 216)" fill="#6E6E6E" font-family="UniversNextPro-Light" font-size="10px">route</text>
 <path id="conductor_node_8" transform="matrix(1 0 0 1 640 320)" d="M0,0 L112,0 L112,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_9" transform="matrix(1 0 0 1 640 320)" d="M0,0 L26,0 L26,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_10" transform="matrix(1 0 0 1 640 320)" d="M0,0 L26,0 L26,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_11" transform="matrix(1 0 0 1 640 320)" d="M0,0 L26,0 L26,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_12" transform="matrix(1 0 0 1 640 320)" d="M0,0 L26,0 L26,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_13" transform="matrix(1 0 0 1 640 320)" d="M0,0 L26,0 L26,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_14" transform="matrix(1 0 0 1 640 320)" d="M0,0 L26,0 L26,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_15" transform="matrix(1 0 0 1 640 320)" d="M0,0 L26,0 L26,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_16" transform="matrix(1 0 0 1 640 320)" d="M0,0 L26,0 L26,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_17" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_18" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_19" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_20" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_21" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_22" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_23" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_24" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_25" transform="matrix(1 0 0 1 640 320)" d="M0,0 L2,0 L2,12 L0,12 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_26" transform="matrix(1 0 0 1 640 320)" d="M0,0 L324,0 L324,14 L0,14 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_27" transform="matrix(1 0 0 1 640 320)" d="M0,0 L81,0 L81,131 L0,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_28" transform="matrix(1 0 0 1 640 320)" d="M0,0 L20.25,0 L20.25,131 L0,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_29" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,131 L-0.5,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_30" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,131 L-0.5,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_31" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,131 L-0.5,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_32" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,131 L-0.5,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_33" transform="matrix(1 0 0 1 640 320)" d="M-3,0 L3,0 L0,4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_34" transform="matrix(1 0 0 1 640 320)" d="M0,0 L77,0 L77,1 L0,1 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_35" transform="matrix(1 0 0 1 640 320)" d="M0,0 L77,0 L77,1 L0,1 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_36" transform="matrix(1 0 0 1 640 320)" d="M0,0 L77,0 L77,1 L0,1 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_37" transform="matrix(1 0 0 1 640 320)" d="M0,0 L77,0 L77,1 L0,1 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_38" transform="matrix(1 0 0 1 640 320)" d="M0,0 L316,0 L316,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_39" transform="matrix(1 0 0 1 640 320)" d="M0,0 L158,0 L158,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_40" transform="matrix(1 0 0 1 640 320)" d="M0,0 L77,0 L77,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_41" transform="matrix(1 0 0 1 640 320)" d="M0,0 L36.5,0 L36.5,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_42" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,4 L-0.5,4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_43" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,4 L-0.5,4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_44" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,4 L-0.5,4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_45" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,4 L-0.5,4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_46" transform="matrix(1 0 0 1 640 320)" d="M0,0 L10,0 L10,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_47" transform="matrix(1 0 0 1 640 320)" d="M0,0 L10,0 L10,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_48" transform="matrix(1 0 0 1 640 320)" d="M0,0 L10,0 L10,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_49" transform="matrix(1 0 0 1 640 320)" d="M0,0 L10,0 L10,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_50" transform="matrix(1 0 0 1 640 320)" d="M0,0 L10,0 L10,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_51" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_52" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_53" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_54" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_55" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_56" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_57" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_58" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_9" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_10" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_11" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_12" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_13" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_14" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_15" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_16" transform="matrix(1 0 0 1 640 320)" d="M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_17" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_18" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_19" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_20" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_21" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_22" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_23" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_24" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_25" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_26" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_27" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_28" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_29" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_30" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_31" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_32" transform="matrix(1 0 0 1 640 320)" d="M0,0 L22,0 L22,11 L0,11 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_33" transform="matrix(1 0 0 1 640 320)" d="M0,0 L2,0 L2,12 L0,12 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_34" transform="matrix(1 0 0 1 640 320)" d="M0,0 L300,0 L300,14 L0,14 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_35" transform="matrix(1 0 0 1 640 320)" d="M0,0 L75,0 L75,131 L0,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_36" transform="matrix(1 0 0 1 640 320)" d="M0,0 L18.75,0 L18.75,131 L0,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_37" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,131 L-0.5,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_38" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,131 L-0.5,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_39" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,131 L-0.5,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_40" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,131 L-0.5,131 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_41" transform="matrix(1 0 0 1 640 320)" d="M-3,0 L3,0 L0,4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_42" transform="matrix(1 0 0 1 640 320)" d="M0,0 L71,0 L71,1 L0,1 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_43" transform="matrix(1 0 0 1 640 320)" d="M0,0 L71,0 L71,1 L0,1 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_44" transform="matrix(1 0 0 1 640 320)" d="M0,0 L71,0 L71,1 L0,1 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_45" transform="matrix(1 0 0 1 640 320)" d="M0,0 L71,0 L71,1 L0,1 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_46" transform="matrix(1 0 0 1 640 320)" d="M0,0 L292,0 L292,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_47" transform="matrix(1 0 0 1 640 320)" d="M0,0 L146,0 L146,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_48" transform="matrix(1 0 0 1 640 320)" d="M0,0 L71,0 L71,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_49" transform="matrix(1 0 0 1 640 320)" d="M0,0 L33.5,0 L33.5,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_50" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,4 L-0.5,4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_51" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,4 L-0.5,4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_52" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,4 L-0.5,4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_53" transform="matrix(1 0 0 1 640 320)" d="M-0.5,0 L0.5,0 L0.5,4 L-0.5,4 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_54" transform="matrix(1 0 0 1 640 320)" d="M0,0 L10,0 L10,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_55" transform="matrix(1 0 0 1 640 320)" d="M0,0 L10,0 L10,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_56" transform="matrix(1 0 0 1 640 320)" d="M0,0 L10,0 L10,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_57" transform="matrix(1 0 0 1 640 320)" d="M0,0 L10,0 L10,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_58" transform="matrix(1 0 0 1 640 320)" d="M0,0 L10,0 L10,2 L0,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_59" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_60" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_61" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
@@ -92,14 +92,14 @@
 <path id="conductor_node_64" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_65" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_66" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_67" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_68" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_69" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_70" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_71" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_72" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_73" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_74" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_67" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_68" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_69" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_70" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_71" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_72" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_73" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_74" transform="matrix(1 0 0 1 640 320)" d="M-2.5,-2.5 L2.5,-2.5 L2.5,2.5 L-2.5,2.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_75" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_76" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_77" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
@@ -108,21 +108,21 @@
 <path id="conductor_node_80" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_81" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_82" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_83" transform="matrix(1 0 0 1 640 320)" d="M0,0 L312,0 L312,1 L0,1 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_84" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L324,-0.5 L324,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_85" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L324,-0.5 L324,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_86" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L324,-0.5 L324,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_87" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L324,-0.5 L324,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_88" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L324,-0.5 L324,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_89" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L324,-0.5 L324,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_90" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_91" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_92" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_93" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_94" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_95" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_96" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<path id="conductor_node_97" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_83" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_84" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_85" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_86" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_87" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_88" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_89" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_90" transform="matrix(1 0 0 1 640 320)" d="M-0.7,-1.5 L0.7,-1.5 L0.7,1.5 L-0.7,1.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_91" transform="matrix(1 0 0 1 640 320)" d="M0,0 L288,0 L288,1 L0,1 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_92" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L300,-0.5 L300,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_93" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L300,-0.5 L300,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_94" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L300,-0.5 L300,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_95" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L300,-0.5 L300,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_96" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L300,-0.5 L300,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_97" transform="matrix(1 0 0 1 640 320)" d="M0,-0.5 L300,-0.5 L300,0.5 L0,0.5 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_98" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_99" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_100" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
@@ -243,14 +243,32 @@
 <path id="conductor_node_215" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_216" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
 <path id="conductor_node_217" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
-<text transform="matrix(1 0 0 1 456.5 85.2)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">1</text>
-<text transform="matrix(1 0 0 1 456.5 99.6)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">2</text>
-<text transform="matrix(1 0 0 1 456.5 114)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">3</text>
-<text transform="matrix(1 0 0 1 456.5 128.4)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">4</text>
-<text transform="matrix(1 0 0 1 456.5 142.8)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">5</text>
-<text transform="matrix(1 0 0 1 456.5 157.2)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">6</text>
-<text transform="matrix(1 0 0 1 456.5 171.6)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">7</text>
-<text transform="matrix(1 0 0 1 456.5 186)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">8</text>
+<path id="conductor_node_218" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_219" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_220" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_221" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_222" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_223" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_224" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<path id="conductor_node_225" transform="matrix(1 0 0 1 640 320)" d="M-6,-2 L6,-2 L6,2 L-6,2 Z" fill="#333333" stroke="#333333" stroke-width="0.5"/>
+<text transform="matrix(1 0 0 1 426 72)" fill="#6E6E6E" font-family="UniversNextPro-Light" font-size="9px">track</text>
+<text transform="matrix(1 0 0 1 452 72)" fill="#3D3D3D" font-family="UniversNextPro-Light" font-size="9px">midi</text>
+<text transform="matrix(1 0 0 1 434.5 85.2)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">1</text>
+<text transform="matrix(1 0 0 1 460.5 85.2)" fill="#3D3D3D" font-family="UniversNextPro-Light" font-size="9px">1</text>
+<text transform="matrix(1 0 0 1 434.5 99.6)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">2</text>
+<text transform="matrix(1 0 0 1 460.5 99.6)" fill="#3D3D3D" font-family="UniversNextPro-Light" font-size="9px">2</text>
+<text transform="matrix(1 0 0 1 434.5 114)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">3</text>
+<text transform="matrix(1 0 0 1 460.5 114)" fill="#3D3D3D" font-family="UniversNextPro-Light" font-size="9px">3</text>
+<text transform="matrix(1 0 0 1 434.5 128.4)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">4</text>
+<text transform="matrix(1 0 0 1 460.5 128.4)" fill="#3D3D3D" font-family="UniversNextPro-Light" font-size="9px">4</text>
+<text transform="matrix(1 0 0 1 434.5 142.8)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">5</text>
+<text transform="matrix(1 0 0 1 460.5 142.8)" fill="#3D3D3D" font-family="UniversNextPro-Light" font-size="9px">5</text>
+<text transform="matrix(1 0 0 1 434.5 157.2)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">6</text>
+<text transform="matrix(1 0 0 1 460.5 157.2)" fill="#3D3D3D" font-family="UniversNextPro-Light" font-size="9px">6</text>
+<text transform="matrix(1 0 0 1 434.5 171.6)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">7</text>
+<text transform="matrix(1 0 0 1 460.5 171.6)" fill="#3D3D3D" font-family="UniversNextPro-Light" font-size="9px">7</text>
+<text transform="matrix(1 0 0 1 434.5 186)" fill="#8A8A8A" font-family="UniversNextPro-Light" font-size="9px">8</text>
+<text transform="matrix(1 0 0 1 460.5 186)" fill="#3D3D3D" font-family="UniversNextPro-Light" font-size="9px">8</text>
 <text id="conductor_text_16" transform="matrix(1 0 0 1 640 320)" fill="#A6A6A6" font-family="UniversNextPro-Light" font-size="10px">-</text>
 <text id="conductor_text_17" transform="matrix(1 0 0 1 640 320)" fill="#A6A6A6" font-family="UniversNextPro-Light" font-size="10px">-</text>
 <text id="conductor_text_18" transform="matrix(1 0 0 1 640 320)" fill="#A6A6A6" font-family="UniversNextPro-Light" font-size="10px">-</text>

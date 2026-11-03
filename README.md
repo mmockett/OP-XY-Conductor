@@ -28,19 +28,21 @@ play. M1-M4 open its four pages, named along the bottom of the screen. Press
 any encoder to switch between a page's two rows.
 
 Every page reads left to right in the same rows: each lane's role and style,
-what it plays, and a wire to the track it plays on. A track's box lights while
-a lane plays it.
+what it plays, and a wire to where it plays, under two columns: track (1-8)
+and midi (channels 1-8). A track's box lights while a lane plays it. The midi
+column stays dim until the SDK can send notes over MIDI (see Limits).
 
 | Page | Encoders | Screen |
 | --- | --- | --- |
 | M1 conductor | key, scale, prog, dens / cmplx, hrate, swing, evolve | The phrase: its chords, the groove, and every lane's beats, a mark a beat sized by its notes; the phrase's letter, and how much the next will change |
 | M2 lanes | lane, role, dens, oct / vel, vary, lock, gate | The bar playing, step by step, for every lane; drums at the height of their lowest voice |
-| M3 lane | the selected lane's role controls: a bass's style, an arp's mode, a chord's voicing… | The selected lane's notes on twelve rows, over lines at the chord's notes, with their range |
+| M3 lane | the selected lane's role controls: a bass's style, an arp's mode, a chord's voicing… | The selected lane alone: its voices down the left (kick to low tom) or its notes (named in the key), its bar across, over lines at the chord's notes, and one wire to its track |
 | M4 route | lane, track, xpose, mute / low, high | Each lane's range on a keyboard from C1 to C7, moved by its transpose, wired to its track |
 
 M1's controls are saved, sequenced and lockable like any track's. Shift +
 encoders 1-4 reroll, freeze, fill and vary: every lane on M1, the selected
-lane on M2-M4. Freeze holds the current phrase; turn it back to release it.
+lane on M2-M4; the header shows them on the row being edited. Freeze holds the
+current phrase; turn it back to release it.
 
 Lanes, roles, routes and the seed are saved with the project. The presets are
 init (the defaults), Pop, Night and Jazz.
@@ -89,5 +91,7 @@ need the OP-XY's screen font, which is never committed here.
   drops past 32. The device's tick rate is not yet measured.
 - M1-M4 are polled each GUI tick, so a press shorter than one tick can be
   missed.
-- Lanes play instrument tracks 1-8 only; there is no MIDI routing of its own.
+- Lanes play instrument tracks 1-8 only. M4 shows MIDI channels 1-8 beside
+  the tracks, but they can't be chosen yet: a machine's notes reach only
+  tracks 1-8's own machines until the SDK can send them over MIDI.
 - M3 shows the current bar, not the whole phrase.

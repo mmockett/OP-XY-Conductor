@@ -4,7 +4,7 @@
 The header block is the SDK's two-row header (opxy/page_header.hpp: its bar
 nodes and text slots 0..15, at their resting places). display.cpp sets every
 other element's position each frame, so the artwork gives only shapes, fonts
-and the palette, plus what never moves: the page labels and the track numbers.
+and the palette, plus what never moves: the page labels and the destinations.
 Run from the machine folder after changing a shape here or a slot in
 display.cpp's Node and Text enums.
 """
@@ -32,29 +32,30 @@ PAGE_TEXTS = ([(10, "#A6A6A6")] * 8 + [(10, "#FFFFFF"), (15, "#FFFFFF"), (12, "#
 WIRE = "M0,-0.4 L60,-0.4 L60,0.4 L0,0.4 Z"
 NODES = [
     (1, ("rect", 112, 2)),          # page mark
-    (8, ("rect", 26, 11)),          # track boxes
-    (8, ("path", WIRE)),            # wires
+    (8, ("path", WIRE)),            # wires, under the boxes they reach
+    (8, ("rect", 22, 11)),          # track boxes
+    (8, ("rect", 22, 11)),          # midi boxes
     (1, ("rect", 2, 12)),           # accent
-    (1, ("rect", 324, 14)),         # row band
-    (1, ("rect", 81, 131)),         # bar band
-    (1, ("rect", 20.25, 131)),      # step band
+    (1, ("rect", 300, 14)),         # row band
+    (1, ("rect", 75, 131)),         # bar band
+    (1, ("rect", 18.75, 131)),      # step band
     (3, ("centred_x", 1, 131)),     # grid lines
     (1, ("centred_x", 1, 131)),     # playhead
     (1, ("path", "M-3,0 L3,0 L0,4 Z")),  # playhead's head
-    (4, ("rect", 77, 1)),           # chord underlines
-    (1, ("rect", 316, 2)),          # the sounding chord's mark: a phrase,
-    (1, ("rect", 158, 2)),          # half a phrase,
-    (1, ("rect", 77, 2)),           # a bar,
-    (1, ("rect", 36.5, 2)),         # half a bar
+    (4, ("rect", 71, 1)),           # chord underlines
+    (1, ("rect", 292, 2)),          # the sounding chord's mark: a phrase,
+    (1, ("rect", 146, 2)),          # half a phrase,
+    (1, ("rect", 71, 2)),           # a bar,
+    (1, ("rect", 33.5, 2)),         # half a bar
     (4, ("centred_x", 1, 4)),       # chord ticks
     (5, ("rect", 10, 2)),           # meter
     (16, ("centred", 5, 5)),        # groove marks
     (16, ("centred", 1.4, 3)),      # off-beats
-    (1, ("rect", 312, 1)),          # keyboard span
-    (6, ("centred_y", 324, 1)),     # tone lines
+    (1, ("rect", 288, 1)),          # keyboard span
+    (6, ("centred_y", 300, 1)),     # tone lines
     (128, ("centred", 12, 4)),      # cells
 ]
-NODE_COUNT = 218
+NODE_COUNT = 226
 
 # Sixteen paints as display.cpp's Shade enum: (fill, stroke, stroke width).
 SOLID = ["#000000", "#101010", "#141414", "#1C1C1C", "#262626", "#2E2E2E", "#3D3D3D", "#555555",
@@ -87,7 +88,7 @@ def main():
     for i, (x, y, size, fill) in enumerate(HEADER_TEXTS):
         lines.append(f'<text id="conductor_text_{i}" transform="matrix(1 0 0 1 {x} {y})" fill="{fill}" '
                      f'{FONT} font-size="{size}px">-</text>')
-    # What never moves: the page labels over M1..M4 and the track numbers.
+    # What never moves: the page labels over M1..M4.
     for p, name in enumerate(["conductor", "lanes", "lane", "route"]):
         lines.append(f'<path d="M{4 + 120 * p},203 L{116 + 120 * p},203 L{116 + 120 * p},204 L{4 + 120 * p},204 Z" fill="#3A3A3A"/>')
         lines.append(f'<text transform="matrix(1 0 0 1 {6 + 120 * p} 216)" fill="#6E6E6E" {FONT} font-size="10px">{name}</text>')
@@ -96,10 +97,15 @@ def main():
         lines += [node(index + i, shape_d(shape)) for i in range(count)]
         index += count
     assert index == NODE_COUNT, index
-    # Over the track boxes, so a lit box keeps its number.
+    # The destinations, titled, over their boxes so a lit box keeps its
+    # number: tracks 1..8, then MIDI channels 1..8, dim until the SDK can
+    # send them.
+    lines.append(f'<text transform="matrix(1 0 0 1 426 72)" fill="#6E6E6E" {FONT} font-size="9px">track</text>')
+    lines.append(f'<text transform="matrix(1 0 0 1 452 72)" fill="#3D3D3D" {FONT} font-size="9px">midi</text>')
     for t in range(8):
-        lines.append(f'<text transform="matrix(1 0 0 1 456.5 {82 + 14.4 * t + 3.2:g})" fill="#8A8A8A" {FONT} '
-                     f'font-size="9px">{t + 1}</text>')
+        y = f"{82 + 14.4 * t + 3.2:g}"
+        lines.append(f'<text transform="matrix(1 0 0 1 434.5 {y})" fill="#8A8A8A" {FONT} font-size="9px">{t + 1}</text>')
+        lines.append(f'<text transform="matrix(1 0 0 1 460.5 {y})" fill="#3D3D3D" {FONT} font-size="9px">{t + 1}</text>')
     for i, (size, fill) in enumerate(PAGE_TEXTS, start=16):
         lines.append(f'<text id="conductor_text_{i}" transform="{PARKED}" fill="{fill}" {FONT} font-size="{size}px">-</text>')
     for i, (fill, stroke, width) in enumerate(PALETTE):
