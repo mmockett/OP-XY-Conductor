@@ -96,11 +96,14 @@ inline u32 beat_of(u32 kick, u32 snare, u32 accent, u32 first, u32 count) {
     return kick & mask ? kBeatKick : snare & mask ? kBeatBack : accent & mask ? kBeatAccent : kBeatRest;
 }
 
+// The word builders stay out of line: inlined, they grew the control's one
+// function past the reach of Blackfin's short conditional jumps.
+
 // The phrase's beats and groove: four bars' generation, which the control
 // works out once a phrase, or when something changes, and keeps.
 struct PhraseCells { u32 cells[8]; u32 groove; };
 
-inline void phrase_cells(const Song& song, const Globals& globals, i32 phrase, Bar& scratch, PhraseCells& out) {
+__attribute__((noinline)) inline void phrase_cells(const Song& song, const Globals& globals, i32 phrase, Bar& scratch, PhraseCells& out) {
     for (u32 i = 0; i < 8; ++i) out.cells[i] = 0;
     out.groove = 0;
     World world(song, globals);
@@ -130,7 +133,7 @@ inline u32 chords_word(const Song& song, const Globals& globals, i32 bar_index, 
            static_cast<u32>(((next.degree % 7) + 7) % 7) << 15 | (next.seventh ? 1u : 0u) << 18;
 }
 
-inline void lanes_words(const Song& song, const Globals& globals, const Bar& bar, i32 bar_index, Words& w) {
+__attribute__((noinline)) inline void lanes_words(const Song& song, const Globals& globals, const Bar& bar, i32 bar_index, Words& w) {
     for (u32 l = 0; l < kLanes; ++l) {
         const bool drum = song.lanes[l].main[kRoleSlot] == kDrum;
         for (u32 s = 0; s < kSteps; ++s)
@@ -143,7 +146,7 @@ inline void lanes_words(const Song& song, const Globals& globals, const Bar& bar
 
 // Twelve rows of one semitone, centred on the notes, or of as many as the
 // lane's span needs.
-inline void roll_words(const Bar& bar, u32 lane, bool drum, Words& w) {
+__attribute__((noinline)) inline void roll_words(const Bar& bar, u32 lane, bool drum, Words& w) {
     i32 low = 127, high = 0;
     for (u32 i = 0; i < bar.count; ++i) {
         const Event& e = bar.events[i];
@@ -165,7 +168,7 @@ inline void roll_words(const Bar& bar, u32 lane, bool drum, Words& w) {
     }
 }
 
-inline void route_words(const Song& song, Words& w) {
+__attribute__((noinline)) inline void route_words(const Song& song, Words& w) {
     for (u32 l = 0; l < kLanes; ++l) {
         const Lane& lane = song.lanes[l];
         const u32 v = static_cast<u32>(lane.route[kLow] & 127) | static_cast<u32>(lane.route[kHigh] & 127) << 7 |
@@ -182,7 +185,7 @@ inline u32 lane_range(const u32* w, u32 lane) {
     return v & ((1u << kRangeBits) - 1u);
 }
 
-inline void words(const Song& song, u32 page, u32 lane_index, const Bar& bar, i32 bar_index, Position at,
+__attribute__((noinline)) inline void words(const Song& song, u32 page, u32 lane_index, const Bar& bar, i32 bar_index, Position at,
                   bool shift, const u32* flash_us, const Globals& globals, const PhraseCells& phrase, Words& w) {
     for (u32 i = 0; i < kWords; ++i) w.v[i] = 0;
     const Lane& lane = song.lanes[lane_index];
