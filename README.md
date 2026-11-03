@@ -91,7 +91,8 @@ need the OP-XY's screen font, which is never committed here.
   tick late. On the host, at 60 ticks a second, that is 0-18 ms, 8 ms on
   average, never early, at any tempo; no tick starts more than 13 notes of the
   32 it may. A GUI stall of a second plays the notes it held back at once and
-  drops past 32. The device's tick rate is not yet measured.
+  drops past 32. On the device (120 bpm, recorded) notes started 0-17 ms
+  after the grid, 5 ms at the median: one 60 Hz GUI tick, as on the host.
 - M1-M4 are polled each GUI tick, so a press shorter than one tick can be
   missed.
 - Lanes play instrument tracks 1-8 only. M4 shows MIDI channels 1-8 beside

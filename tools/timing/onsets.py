@@ -24,6 +24,8 @@ from pathlib import Path
 
 HOP_S = 0.00025  # the envelope's resolution: a quarter of a millisecond
 GAP_S = 0.045    # hits closer than this are one hit
+BEFORE_S = (0.030, 0.003)  # a hit must jump over the envelope of this window before it
+JUMP = 2.0       # by this factor
 
 
 def read(path):
@@ -44,20 +46,22 @@ def read(path):
 
 
 def onsets(samples, rate):
-    """Hit times in seconds: where the envelope first rises past a fifth of the
-    loudest hit after a quiet gap."""
+    """Hit times in seconds: where the envelope jumps to twice what it was over
+    the 30 ms before, and past a tenth of the loudest hit. A plain threshold
+    re-arms at a low drum's zero crossings and counts one hit several times."""
     hop = max(1, int(rate * HOP_S))
     env = [max(abs(s) for s in samples[i:i + hop]) for i in range(0, len(samples) - hop, hop)]
     loud = sorted(env)[int(len(env) * 0.999)]
-    rise, quiet = 0.2 * loud, 0.05 * loud
-    times, armed, last = [], True, -1.0
-    for i, e in enumerate(env):
+    rise = 0.1 * loud
+    far, near = (round(s / HOP_S) for s in BEFORE_S)
+    times, last = [], -1.0
+    for i in range(far, len(env)):
         t = i * hop / rate
-        if armed and e >= rise and t - last >= GAP_S:
+        if env[i] < rise or t - last < GAP_S:
+            continue
+        if env[i] >= JUMP * max(env[i - far:i - near]):
             times.append(t)
-            last, armed = t, False
-        elif e < quiet:
-            armed = True
+            last = t
     return times
 
 
@@ -101,8 +105,10 @@ def report(late, ppm, bpm):
 
 
 def selftest():
-    """Clicks on sixteenths at 120 bpm, each late by up to one 60 Hz tick, after
-    an 11 ms recording latency: the script must find a 16.7 ms spread."""
+    """Drum-like hits on sixteenths at 120 bpm, each late by up to one 60 Hz
+    tick, after an 11 ms recording latency: clicks, and low kicks ringing for
+    a tenth of a second, which a plain threshold counts several times. The
+    script must find each hit once, and a 16.7 ms spread."""
     rate, bpm, tick = 48000, 120, 1 / 60
     random.seed(1)
     step = 15.0 / bpm
@@ -112,8 +118,13 @@ def selftest():
             late = random.uniform(0, tick)
             truth.append(late)
             start = int((0.5 + 0.011 + k * step + late) * rate)
-            for j in range(int(0.03 * rate)):
-                samples[start + j] += math.sin(j * 0.2) * math.exp(-j / (0.004 * rate)) * random.uniform(0.6, 1.0)
+            level = random.uniform(0.6, 1.0)
+            if k % 4 == 0:  # a kick: 55 Hz, ringing
+                for j in range(int(0.11 * rate)):
+                    samples[start + j] += level * math.sin(2 * math.pi * 55 * j / rate) * math.exp(-j / (0.04 * rate))
+            else:
+                for j in range(int(0.03 * rate)):
+                    samples[start + j] += level * math.sin(j * 0.2) * math.exp(-j / (0.004 * rate))
     for i in range(len(samples)):
         samples[i] += random.gauss(0, 0.002)
     path = Path(tempfile.mkdtemp()) / "clicks.wav"
