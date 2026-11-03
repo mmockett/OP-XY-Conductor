@@ -51,6 +51,8 @@ inline void default_song(Song& song) {
         lane.variation = 0;
         lane.fill = 100;
         set_role(lane, roles[l]);
+        // The arp supports the song rather than leading it.
+        if (roles[l] == kArp) lane.main[kVel] = 60;
     }
 }
 
@@ -605,6 +607,10 @@ inline void arps(Context& c) {
     const i8* d = c.d;
     World& w = *c.world;
     const i32 mode = d[0], every = d[1] == 0 ? 4 : d[1] == 1 ? 2 : 1, octaves = d[2] + 1, E = c.energy;
+    // It follows the song's energy: below 40 it rests; to 65 it plays the
+    // second half of each phrase, lifting into the next; above, every bar.
+    const i32 phrase_bar = ((c.bar % static_cast<i32>(kPhrase)) + static_cast<i32>(kPhrase)) % static_cast<i32>(kPhrase);
+    if (E < 40 || (E < 65 && phrase_bar < 2)) return;
     for (i32 s = 0; s < static_cast<i32>(kSteps); s += every) {
         const Chord chord = c.chord_at(s);
         i32 semis[7];

@@ -54,6 +54,31 @@ static bool in_scale(const Globals& g, u32 pitch) {
     return false;
 }
 
+// The arp follows the song's energy: it rests when the song is sparse, plays
+// the second half of each phrase in the middle, and every bar when busy.
+static void arp_energy() {
+    static Song song;
+    static Bar bar;
+    default_song(song);
+    const u32 arp = 4;
+    u32 bars[3][kPhrase] = {};
+    const u32 densities[3] = {35, 50, 70};
+    for (u32 k = 0; k < 3; ++k) {
+        const Globals g = globals(0, 0, 0, densities[k], 40, 1, 0, 30);
+        for (i32 b = 0; b < 16; ++b) {
+            generate(song, g, b, bar);
+            for (u32 i = 0; i < bar.count; ++i)
+                if (bar.events[i].lane == arp) {
+                    ++bars[k][b % kPhrase];
+                    break;
+                }
+        }
+    }
+    check(bars[0][0] + bars[0][1] + bars[0][2] + bars[0][3] == 0, "in a sparse song the arp rests");
+    check(bars[1][0] + bars[1][1] == 0 && bars[1][2] && bars[1][3], "at middling energy the arp lifts each phrase's last two bars");
+    check(bars[2][0] && bars[2][1] && bars[2][2] && bars[2][3], "in a busy song the arp plays every bar");
+}
+
 static void globals_decode() {
     for (u32 c = 0; c < 12; ++c) check(global_value(kKey, choice_word(c, 12)) == static_cast<i32>(c), "key choices decode");
     check(global_value(kDensity, percent_word(100)) == 100 && global_value(kDensity, 0) == 0, "percentages decode");
@@ -424,6 +449,7 @@ static void notes_per_tick() {
 int main() {
     globals_decode();
     generation();
+    arp_energy();
     freezing();
     controlling();
     stopped_transport();

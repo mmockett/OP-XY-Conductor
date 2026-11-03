@@ -474,6 +474,7 @@ inline void draw_roll(const Input& input, const View& v, Frame& frame) {
             const u32 shade = time_shade(v, lane, s < v.step, s == v.step, true);
             cells.put(frame, kLeft + kBeat * static_cast<i32>(s) + kBeat / 2, at.y(r), shade, 1434);
         }
+    if (!cells.next) centred(frame, kMidText + 2, kLeft + kSpan / 2, kRollMiddle + px(4), "rests this bar", 11);
 }
 
 // M4: each lane's range on a keyboard from C1 to C7, in dashes, moved by its

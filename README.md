@@ -44,8 +44,11 @@ encoders 1-4 reroll, freeze, fill and vary: every lane on M1, the selected
 lane on M2-M4; the header shows them on the row being edited. Freeze holds the
 current phrase; turn it back to release it.
 
-Lanes, roles, routes and the seed are saved with the project. The presets are
-init (the defaults), Pop, Night and Jazz.
+Lanes, roles, routes and the seed are saved with the project. The presets set
+M1's controls: init (the defaults, C major), Pop (bright G major, busy),
+Night (A minor, sparse, slow chords) and Jazz (F major, swung, rich chords).
+The arp follows the song's density: it rests in a sparse song, lifts the last
+two bars of each phrase in the middle, and plays every bar in a busy one.
 
 ## What you need
 

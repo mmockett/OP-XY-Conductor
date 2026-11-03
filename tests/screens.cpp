@@ -89,6 +89,9 @@ int main() {
         notes += t[0] >= 'A' && t[0] <= 'G' && ((t[1] >= '0' && t[1] <= '9') || t[1] == 'b' || t[1] == '#');
     }
     check(notes >= 6 && !shows("1 drum"), "M3 on a synth lane names its notes, not the other lanes");
+    // At this density the arp rests outside each phrase's last two bars.
+    open(3, 4);
+    check(shows("rests this bar"), "M3 says when the lane rests for the bar");
 
     // MIDI: shown, but nothing can be routed there until the SDK sends it.
     open(4, 0);

@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
         if (!std::strcmp(argv[i], "shift")) shift = true;
         if (!std::strcmp(argv[i], "row2")) row2 = true;
     }
-    // C minor, pop, playing bar 2 step 7. Lane 4 (lead) plays track 6 an
+    // C minor, pop, playing bar 3 step 7. Lane 4 (lead) plays track 6 an
     // octave up, muted; lane 6 (pad) plays track 4.
     const i32 globals[kGlobals] = {choice_word(0, 12), choice_word(1, 7), choice_word(0, 6), percent_word(60),
                                    percent_word(50),   choice_word(1, 4), percent_word(10), percent_word(30)};
@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
     if (frozen) control_state.song.frozen_at = 0;
     control_state.lane = static_cast<u8>(lane);
     input.page_key = page + 1;
-    const u32 at = kBarTicks + 6 * kTicks;
+    const u32 at = 2 * kBarTicks + 6 * kTicks;
     for (u32 t = at - 30; t <= at; t += 3) tick(t);
     input.shift = shift;
     tick(at);
