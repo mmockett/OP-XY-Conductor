@@ -185,7 +185,7 @@ static bool sounds(const Bar& bar, u32 lane, u32 first, u32 last) {
 
 // M1's words mark every beat of the phrase that sounds, and only those; M2's
 // every step; M3's put the selected lane's notes on rows inside the range it
-// labels; M4's carry each lane's range and transpose.
+// labels.
 static void playing_pages() {
     const u32 at = 2 * kBarTicks;
     input.page_key = kConduct + 1;
@@ -247,21 +247,6 @@ static void playing_pages() {
     check(bands[0] == 1 && margins[0] >= -1 && margins[0] <= 1, "M3 centres a lane inside an octave on semitone rows");
     check(bands[1] > 1, "M3 widens its rows for a lane wider than twelve semitones");
 
-    input.page_key = kRoute + 1;
-    state.song.lanes[6].route[kLow] = 40;
-    state.song.lanes[6].route[kHigh] = 91;
-    state.song.lanes[6].route[kXpose] = -24;
-    state.song.lanes[7].route[kXpose] = 24;
-    tick(at + 3, true);
-    bool ranges = true;
-    for (u32 l = 0; l < kLanes; ++l) {
-        const u32 r = lane_range(shown(), l);
-        const Lane& lane = state.song.lanes[l];
-        ranges = ranges && static_cast<i32>(field(r, 0, 7)) == lane.route[kLow] &&
-                 static_cast<i32>(field(r, 7, 7)) == lane.route[kHigh] &&
-                 static_cast<i32>(field(r, 14, 6)) - 24 == lane.route[kXpose];
-    }
-    check(ranges, "M4 carries every lane's range and transpose");
     tick(at + 4, false);
 }
 

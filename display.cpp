@@ -22,7 +22,7 @@ enum Node {
     kRowBand = 34,       // M2, M4: behind the selected lane
     kBarBand = 35,       // M1: behind the bar playing
     kStepBand = 36,      // M2, M3: behind the step playing
-    kGridLines = 37,     // 3: between bars or beats; M4's octave guides
+    kGridLines = 37,     // 3: between bars or beats
     kPlayhead = 40,      // M1
     kPlayMark = 41,      // M1: the playhead's head
     kUnderlines = 42,    // 4: M1, under each bar's chords
@@ -31,10 +31,10 @@ enum Node {
     kMeter = 54,         // 5: M1, how far the next phrase will change
     kGrooveMarks = 59,   // 16: M1 by beat, M2 by step
     kOffbeats = 75,      // 16: M1, the swung off-beats; M2, accents
-    kScaleLine = 91,     // M4: the keyboard's span
-    kToneLines = 92,     // 6: M3, the chord's notes
-    kCells = 98,         // 128: a lane's beat, step or note, or a stretch of its range
-    kNodes = 226,
+    kLeaders = 91,       // 8: M4, each lane straight across to its wire
+    kToneLines = 99,     // 6: M3, the chord's notes
+    kCells = 105,        // 128: a lane's beat, step or note
+    kNodes = 233,
 };
 const u32 kCellCount = kNodes - kCells;
 // Text slots: the header's sixteen, then the pages' own. Each slot has its
@@ -255,9 +255,8 @@ inline void bar_lines(Frame& frame) {
 
 // One cell from the pool, or none once it is spent.
 // M1 and M2 give each lane's beat or step its own cell (8 x 16, the whole
-// pool), so a bar or beat changes only the cells whose marks change. M3 and
-// M4 take cells in order up to `end`; M4 keeps the last ones for the selected
-// lane, so turning its range moves only its own.
+// pool), so a bar or beat changes only the cells whose marks change. M3
+// takes cells in order up to `end`.
 struct Cells {
     u32 next, end;
     void put(Frame& frame, i32 x, i32 y, u32 shade, i32 scale) {
@@ -482,62 +481,15 @@ inline void draw_roll(const Input& input, const View& v, Frame& frame) {
     if (!cells.next) centred(frame, kMidText + 2, kLeft + kSpan / 2, kRollMiddle + px(4), "rests this bar", 11);
 }
 
-// M4: each lane's range on a keyboard from C1 to C7, in dashes, moved by its
-// transpose (faint marks show where it was), and wired to its track. The
-// MIDI column says it can't play yet.
+// M4: where each lane plays. Each lane runs straight across to its wire,
+// which takes it to its track; the header holds the selected lane's range and
+// transpose. The MIDI column says it can't play yet.
 inline void draw_route(const View& v, Frame& frame) {
-    const u32* w = v.w;
-    const i32 lowest = 24, highest = 96, x0 = px(92), width = px(288);
-    struct Key {
-        static i32 x(i32 note, i32 x0, i32 width) { return x0 + width / 72 * (note - 24); }
-    };
     right_text(frame, kDimText, px(474), px(197), "midi: not yet", 9);
-    show(frame, kScaleLine, x0, px(58), kMid);
-    static const char* const kOctaves[3] = {"C2", "C4", "C6"};
-    for (u32 i = 0; i < 3; ++i) {
-        const i32 x = Key::x(36 + 24 * static_cast<i32>(i), x0, width);
-        show(frame, kGridLines + i, x, px(63), kGrid);
-        centred(frame, kMidText + i, x, px(51), kOctaves[i], 11, unit * 9 / 11);
-    }
-    // A range takes at most 15 dashes and two marks.
-    const u32 kept = 17;
-    Cells others = {0, kCellCount - kept}, own = {kCellCount - kept, kCellCount};
     for (u32 l = 0; l < kLanes; ++l) {
         if (v.role(l) == kOff) continue;
-        Cells& cells = l == v.selected ? own : others;
-        const u32 r = lane_range(w, l);
-        const i32 low = static_cast<i32>(field(r, 0, 7)), high = static_cast<i32>(field(r, 7, 7));
-        const i32 xpose = static_cast<i32>(field(r, 14, 6)) - 24;
-        const bool sel = l == v.selected, muted = v.muted(l);
-        if (xpose) {
-            // Where the range was before its transpose: a faint upright mark at each end.
-            const i32 marks[2] = {clampi(low, lowest, highest), clampi(high, lowest, highest)};
-            for (u32 m = 0; m < 2; ++m) {
-                const u32 node = kCells + cells.next;
-                cells.put(frame, Key::x(marks[m], x0, width), row_y(l), kDim, unit);
-                opxy::draw::turn(frame, node, Turn{0, unit});
-            }
-        }
-        {
-            const i32 lo = clampi(low + xpose, lowest, highest), hi = clampi(high + xpose, lowest, highest);
-            if (hi <= lo) continue;
-            const i32 a = Key::x(lo, x0, width), b = Key::x(hi, x0, width), dash = px(18);
-            const u32 shade = sel ? kWhite : muted ? kMuted : kDim;
-            // Dashes 18 px long, evenly spread so the last ends at the top.
-            const i32 count = b - a <= dash ? 1 : (b - a - dash + px(20) - 1) / px(20) + 1;
-            for (i32 k = 0; k < count; ++k) {
-                const i32 x = count == 1 ? (a + b) / 2 : a + dash / 2 + (b - a - dash) / (count - 1) * k;
-                cells.put(frame, x, row_y(l), shade, 1536);
-            }
-            if (sel) {
-                // The range's own notes, though the keyboard stops at C1 and C7.
-                char note[8];
-                note_name(note, clampi(low + xpose, 0, 127));
-                right_text(frame, kBigText, a - px(4), row_y(l) + px(35) / 10, note, 15, unit * 3 / 5);
-                note_name(note, clampi(high + xpose, 0, 127));
-                text(frame, kChordText, b + px(4), row_y(l) + px(35) / 10, unit * 3 / 4, note);
-            }
-        }
+        const u32 shade = v.muted(l) ? kMuted : l == v.selected ? kWhite : kDim;
+        show(frame, kLeaders + l, kLeft, row_y(l), shade);
     }
 }
 

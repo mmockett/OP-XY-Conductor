@@ -34,8 +34,6 @@ enum LanesWord { kStepCells = kPayload, kStepGroove = kPayload + 8 };
 // M3: the selected lane's bar on twelve rows, or eight drum voices; then the harmony.
 enum RollWord { kRange = kPayload, kRoll, kRollChords = kPayload + 7 };  // kRange: lowest row's pitch 7 | semitones a row 4 | drum 1
 const u32 kRollRows = 12, kDrumRows = 8;
-// M4: each lane's range, 20 bits: low 7 | high 7 | transpose + 24, 6.
-const u32 kRangeBits = 20;
 
 struct Words { u32 v[kWords]; };
 struct Position { u32 tick; bool playing; };
@@ -168,23 +166,6 @@ __attribute__((noinline)) inline void roll_words(const Bar& bar, u32 lane, bool 
     }
 }
 
-__attribute__((noinline)) inline void route_words(const Song& song, Words& w) {
-    for (u32 l = 0; l < kLanes; ++l) {
-        const Lane& lane = song.lanes[l];
-        const u32 v = static_cast<u32>(lane.route[kLow] & 127) | static_cast<u32>(lane.route[kHigh] & 127) << 7 |
-                      static_cast<u32>(lane.route[kXpose] + 24) << 14;
-        const u32 index = kRangeBits * l, shift = index % 32;
-        w.v[kPayload + index / 32] |= v << shift;
-        if (shift + kRangeBits > 32) w.v[kPayload + index / 32 + 1] |= v >> (32 - shift);
-    }
-}
-inline u32 lane_range(const u32* w, u32 lane) {
-    const u32 index = kRangeBits * lane, shift = index % 32;
-    u32 v = w[kPayload + index / 32] >> shift;
-    if (shift + kRangeBits > 32) v |= w[kPayload + index / 32 + 1] << (32 - shift);
-    return v & ((1u << kRangeBits) - 1u);
-}
-
 __attribute__((noinline)) inline void words(const Song& song, u32 page, u32 lane_index, const Bar& bar, i32 bar_index, Position at,
                   bool shift, const u32* flash_us, const Globals& globals, const PhraseCells& phrase, Words& w) {
     for (u32 i = 0; i < kWords; ++i) w.v[i] = 0;
@@ -228,7 +209,7 @@ __attribute__((noinline)) inline void words(const Song& song, u32 page, u32 lane
         roll_words(bar, lane_index, role == kDrum, w);
         w.v[kRollChords] = chords_word(song, globals, bar_index, step);
         break;
-    default: route_words(song, w);
+    default: break;  // M4 draws from the lanes' roles, targets and mutes alone
     }
 }
 }

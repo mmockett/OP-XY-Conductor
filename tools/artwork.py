@@ -51,11 +51,11 @@ NODES = [
     (5, ("rect", 10, 2)),           # meter
     (16, ("centred", 5, 5)),        # groove marks
     (16, ("centred", 1.4, 3)),      # off-beats
-    (1, ("rect", 288, 1)),          # keyboard span
+    (8, ("path", "M0,-0.4 L304,-0.4 L304,0.4 L0,0.4 Z")),  # M4: each lane straight across to its wire
     (6, ("centred_y", 300, 1)),     # tone lines
     (128, ("centred", 12, 4)),      # cells
 ]
-NODE_COUNT = 226
+NODE_COUNT = 233
 
 # Sixteen paints as display.cpp's Shade enum: (fill, stroke, stroke width).
 SOLID = ["#000000", "#101010", "#141414", "#1C1C1C", "#262626", "#2E2E2E", "#3D3D3D", "#555555",
