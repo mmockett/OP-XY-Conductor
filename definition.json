@@ -131,6 +131,16 @@
     }
   ],
   "presets": {
+    "init": {
+      "key": 0.0417,
+      "scale": 0.0714,
+      "prog": 0.0833,
+      "dens": 0.5,
+      "cmplx": 0.4,
+      "hrate": 0.375,
+      "swing": 0,
+      "evolve": 0.3
+    },
     "Pop": {
       "key": 0.0417,
       "scale": 0.0714,
@@ -178,7 +188,7 @@
       "palette": 16
     },
     "trackControl": {
-      "stateBytes": 2236,
+      "stateBytes": 2240,
       "stateAlignment": 4,
       "unique": true,
       "aux": [

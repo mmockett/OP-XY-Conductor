@@ -23,6 +23,7 @@ struct ControlState {
     i32 phrase_at;      // the phrase `phrase` describes
     u32 phrase_stale;   // 1 when the song or the controls changed since
     PhraseCells phrase; // M1's beats and groove
+    u32 generations;    // bars generated since the reset, for tests
 };
 
 inline void control_reset(ControlState& state) {
@@ -39,6 +40,7 @@ inline void control_reset(ControlState& state) {
     state.generated = 0;
     state.phrase_at = 0;
     state.phrase_stale = 1;
+    state.generations = 0;
     for (u32 l = 0; l < kLanes; ++l) state.flash_us[l] = 0;
 }
 
@@ -120,6 +122,7 @@ inline void turn(ControlState& state, u32 slot, i32 direction, bool shift) {
 inline void ensure(ControlState& state, i32 bar) {
     if (state.generated && !state.dirty && state.bar == bar) return;
     generate(state.song, state.globals, bar, state.current);
+    ++state.generations;
     state.bar = bar;
     state.generated = 1;
     state.dirty = 0;
@@ -184,6 +187,7 @@ inline void control(ControlState& state, const opxy::control::Input& input, opxy
     // once a phrase or after a change.
     if (state.page == kConduct && (state.phrase_stale || state.phrase_at != phrase_of(bar))) {
         phrase_cells(state.song, state.globals, phrase_of(bar), state.current, state.phrase);
+        state.generations += kPhrase;
         state.phrase_at = phrase_of(bar);
         state.phrase_stale = 0;
         state.generated = 0;

@@ -43,7 +43,7 @@ encoders 1-4 reroll, freeze, fill and vary: every lane on M1, the selected
 lane on M2-M4. Freeze holds the current phrase; turn it back to release it.
 
 Lanes, roles, routes and the seed are saved with the project. The presets are
-Pop, Night and Jazz.
+init (the defaults), Pop, Night and Jazz.
 
 ## What you need
 
@@ -62,6 +62,8 @@ Conductor uses SDK features that are not in `staging` yet; open-xy
 python ../open-xy/sdk.py test --machine .
 python tools/artwork.py   # after changing a node's shape or slot
 XY_FONT=/path/to/UniversNextPro-Light.ttf python tools/screens/screens.py --sdk ../open-xy   # docs/ screenshots
+c++ -std=c++11 -O2 -I ../open-xy/sdk/include -I . tools/timing/timing.cpp -o /tmp/timing && /tmp/timing   # note timing on GUI ticks
+python tools/timing/onsets.py recording.wav --bpm 120   # note timing on the device, from a recording
 ```
 
 - `generator.h`: the generator, integer-only and within 32 bits.
@@ -70,6 +72,8 @@ XY_FONT=/path/to/UniversNextPro-Light.ttf python tools/screens/screens.py --sdk 
 - `words.h`: what the control tells the display each tick, laid out by page.
 - `display.cpp`: the pages.
 - `tools/screens/`: renders the pages from the control and display code.
+- `tools/timing/`: how late notes start on GUI ticks, on the host and from a
+  recording of the device.
 
 The engine is silent: Conductor plays other tracks' machines. The screenshots
 need the OP-XY's screen font, which is never committed here.
@@ -78,8 +82,11 @@ need the OP-XY's screen font, which is never committed here.
 
 - Roles are set per lane: the OP-XY doesn't tell a machine which tracks hold
   drums.
-- Notes start on GUI ticks, so timing can jitter by up to one tick. This is
-  not yet measured on the device.
+- Notes start on the first GUI tick after their time, so each starts up to one
+  tick late. On the host, at 60 ticks a second, that is 0-18 ms, 8 ms on
+  average, never early, at any tempo; no tick starts more than 13 notes of the
+  32 it may. A GUI stall of a second plays the notes it held back at once and
+  drops past 32. The device's tick rate is not yet measured.
 - M1-M4 are polled each GUI tick, so a press shorter than one tick can be
   missed.
 - Lanes play instrument tracks 1-8 only; there is no MIDI routing of its own.

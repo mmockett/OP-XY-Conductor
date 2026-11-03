@@ -345,11 +345,89 @@ static void controlling() {
     check(loaded.song.lanes[1].main[kRoleSlot] == kBass, "a project without data starts with the default song");
 }
 
+// Stopped, nothing regenerates or moves however the transport's ticks run,
+// on any page, until a control changes. On the device this is the 027 fix:
+// whatever made the song move while stopped, the control now ignores the
+// stopped transport's position.
+static void stopped_transport() {
+    std::memset(&input, 0, sizeof input);
+    std::memset(&state, 0, sizeof state);
+    input.track = 11;
+    input.transport.bpm_x10 = 1200;
+    input.elapsed_us = 16667;
+    const i32 words_in[kGlobals] = {choice_word(0, 12), choice_word(0, 7), choice_word(0, 6), percent_word(50),
+                                    percent_word(40), choice_word(1, 4), 0, percent_word(30)};
+    for (u32 i = 0; i < kGlobals; ++i) input.values[11][i] = words_in[i];
+    control_reset(state);
+    // Play into the song's sixth bar, then stop.
+    for (u32 t = 0; t < 5 * kBarTicks + 7 * kTicks; t += 8) tick(t, true);
+    bool quiet = true, still = true, held = true;
+    for (u32 page = 1; page <= kPages; ++page) {
+        input.page_key = page;
+        // The lane lights fade for kFlashUs after the last note; then the
+        // screen must hold.
+        for (u32 i = 0; i < 12; ++i) tick(5 * kBarTicks + 7 * kTicks, false);
+        const u32 generations = state.generations;
+        i32 shown[kWords];
+        std::memcpy(shown, overlay.display, sizeof shown);
+        // The stopped transport's ticks: where play stopped, running on, back
+        // to the start, or anything at all.
+        u32 noise = 12345;
+        for (u32 i = 0; i < 2000; ++i) {
+            noise = noise * 1664525u + 1013904223u;
+            const u32 ticks = i < 500 ? 5 * kBarTicks + 7 * kTicks : i < 1000 ? 5 * kBarTicks + 8 * i : i < 1500 ? 0 : noise;
+            tick(ticks, false);
+            quiet = quiet && overlay.note_count == 0;
+            still = still && std::memcmp(shown, overlay.display, sizeof shown) == 0;
+        }
+        held = held && state.generations == generations && state.bar == 0;
+    }
+    check(quiet, "stopped, nothing plays");
+    check(held, "stopped, no page regenerates the song, wherever the transport's ticks run");
+    check(still, "stopped, no page's screen changes");
+    // A control turned while stopped regenerates once, then holds again.
+    input.values[11][kDensity] = percent_word(70);
+    tick(0, false);
+    const u32 after = state.generations;
+    for (u32 i = 0; i < 200; ++i) tick(i * 37, false);
+    check(after > 0 && state.generations == after, "stopped, a turned control regenerates once and then holds");
+}
+
+// At 60 GUI ticks a second, even the busiest song never starts more notes in
+// one tick than a tick may start (note_capacity): none is dropped.
+static void notes_per_tick() {
+    std::memset(&input, 0, sizeof input);
+    std::memset(&state, 0, sizeof state);
+    input.track = 11;
+    input.transport.bpm_x10 = 2400;
+    const i32 words_in[kGlobals] = {choice_word(0, 12), choice_word(0, 7), choice_word(0, 6), percent_word(100),
+                                    percent_word(100), choice_word(0, 4), percent_word(50), percent_word(100)};
+    for (u32 i = 0; i < kGlobals; ++i) input.values[11][i] = words_in[i];
+    control_reset(state);
+    tick(0, false);
+    // 240 bpm is 384 ticks96 a second, 6.4 a GUI tick at 60 a second.
+    u32 most = 0, total = 0, expected = 0;
+    static Bar bar;
+    for (u32 b = 0; b < 16; ++b) {
+        generate(state.song, state.globals, static_cast<i32>(b), bar);
+        expected += bar.count;
+    }
+    for (u32 frame = 0; frame * 32 / 5 < 16 * kBarTicks; ++frame) {
+        tick(frame * 32 / 5, true);
+        most = overlay.note_count > most ? overlay.note_count : most;
+        total += overlay.note_count;
+    }
+    check(total == expected && most * 2 <= opxy::control::note_capacity,
+          "at 60 ticks a second and 240 bpm, every note plays and no tick starts half note_capacity");
+}
+
 int main() {
     globals_decode();
     generation();
     freezing();
     controlling();
+    stopped_transport();
+    notes_per_tick();
     if (!failures) std::puts("ok");
     return failures ? 1 : 0;
 }
