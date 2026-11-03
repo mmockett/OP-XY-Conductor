@@ -27,12 +27,16 @@ On track 12, Shift + M1 opens the engine list: choose Conductor, then press
 play. M1-M4 open its four pages, named along the bottom of the screen. Press
 any encoder to switch between a page's two rows.
 
+Every page reads left to right in the same rows: each lane's role and style,
+what it plays, and a wire to the track it plays on. A track's box lights while
+a lane plays it.
+
 | Page | Encoders | Screen |
 | --- | --- | --- |
-| M1 conductor | key, scale, prog, dens / cmplx, hrate, swing, evolve | The chord wheel, the progression, the phrase's groove and each lane playing |
-| M2 lanes | lane, role, dens, oct / vel, vary, lock, gate | Every lane's bar, accents brightest |
-| M3 lane | the selected lane's role controls: a bass's style, an arp's mode, a chord's voicing… | The selected lane's notes, on twelve rows labelled with their range |
-| M4 route | lane, track, xpose, mute / low, high | Which track each lane plays; muted lanes struck through |
+| M1 conductor | key, scale, prog, dens / cmplx, hrate, swing, evolve | The phrase: its chords, the groove, and every lane's beats, a mark a beat sized by its notes; the phrase's letter, and how much the next will change |
+| M2 lanes | lane, role, dens, oct / vel, vary, lock, gate | The bar playing, step by step, for every lane; drums at the height of their lowest voice |
+| M3 lane | the selected lane's role controls: a bass's style, an arp's mode, a chord's voicing… | The selected lane's notes on twelve rows, over lines at the chord's notes, with their range |
+| M4 route | lane, track, xpose, mute / low, high | Each lane's range on a keyboard from C1 to C7, moved by its transpose, wired to its track |
 
 M1's controls are saved, sequenced and lockable like any track's. Shift +
 encoders 1-4 reroll, freeze, fill and vary: every lane on M1, the selected

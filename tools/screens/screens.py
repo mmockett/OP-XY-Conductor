@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Renders Conductor's four pages from its own control and display code, at the
+"""Renders Conductor's four pages, and M1 frozen and stopped, from its own control and display code, at the
 OP-XY's 480 x 220 (captured at 2x) in the device's font, into docs/.
 
     XY_FONT=/path/to/UniversNextPro-Light.ttf python3 tools/screens/screens.py --sdk ../open-xy
 
 XY_FONT is the OP-XY's screen font, never committed here. Needs a C++ compiler
-and Google Chrome. Writes docs/m1.png..m4.png and docs/screens.png (2 x 2).
+and Google Chrome. Writes docs/m1.png..m4.png, docs/m1-frozen.png, docs/m1-stopped.png
+and docs/screens.png (M1..M4, 2 x 2).
 """
 import argparse
 import os
@@ -17,32 +18,39 @@ import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-# (file, page, selected lane): M3 shows the arp.
-PAGES = [("m1", 0, 0), ("m2", 1, 0), ("m3", 2, 4), ("m4", 3, 2)]
+# (file, page, selected lane, states): M2..M4 select the arp.
+PAGES = [("m1", 0, 4, []), ("m2", 1, 4, []), ("m3", 2, 4, []), ("m4", 3, 4, []),
+         ("m1-frozen", 0, 4, ["frozen"]), ("m1-stopped", 0, 4, ["stopped"])]
 
 
 def frame_svg(art, dump):
-    palette = {int(i): c for i, c in re.findall(r'id="conductor_palette_(\d+)"[^>]*fill="(#[0-9A-Fa-f]{6})"', art)}
+    palette = {int(i): (f, s, w) for i, f, s, w in re.findall(
+        r'id="conductor_palette_(\d+)"[^>]*fill="(#[0-9A-Fa-f]{6})" stroke="(#[0-9A-Fa-f]{6})" stroke-width="([0-9.]+)"', art)}
     nodes, texts = {}, {}
     for line in dump.splitlines():
         if line.startswith("n "):
             p = line.split(" ")
-            nodes[int(p[1])] = tuple(int(v) for v in p[2:7])
+            nodes[int(p[1])] = tuple(int(v) for v in p[2:9])
         else:
-            p = line.split(" ", 4)
-            texts[int(p[1])] = (int(p[2]), int(p[3]), p[4] if len(p) > 4 else "")
+            p = line.split(" ", 5)
+            texts[int(p[1])] = (int(p[2]), int(p[3]), int(p[4]), p[5] if len(p) > 5 else "")
 
     def node(m):
         el = m.group(0)
-        x, y, scale, shade, paint = nodes[int(re.search(r"conductor_node_(\d+)", el).group(1))]
-        el = re.sub(r'transform="[^"]*"', f'transform="matrix({scale / 1024} 0 0 {scale / 1024} {x / 1024} {y / 1024})"', el)
+        x, y, scale, cos, sin, shade, paint = nodes[int(re.search(r"conductor_node_(\d+)", el).group(1))]
+        k = scale / 1024 / 1024
+        el = re.sub(r'transform="[^"]*"', f'transform="matrix({k * cos} {k * sin} {-k * sin} {k * cos} {x / 1024} {y / 1024})"', el)
         if paint == 2:
-            el = re.sub(r'(fill|stroke)="#[0-9A-Fa-f]{6}"', lambda a: f'{a.group(1)}="{palette[shade]}"', el)
+            fill, stroke, width = palette[shade]
+            el = re.sub(r'fill="#[0-9A-Fa-f]{6}"', f'fill="{fill}"', el)
+            el = re.sub(r'stroke="#[0-9A-Fa-f]{6}"', f'stroke="{stroke}"', el)
+            el = re.sub(r'stroke-width="[0-9.]+"', f'stroke-width="{width}"', el)
         return el
 
     def text(m):
-        x, y, s = texts[int(m.group(1))]
-        head = re.sub(r'transform="[^"]*"', f'transform="matrix(1 0 0 1 {x / 1024} {y / 1024})"', m.group(0).split(">")[0])
+        x, y, scale, s = texts[int(m.group(1))]
+        k = scale / 1024
+        head = re.sub(r'transform="[^"]*"', f'transform="matrix({k} 0 0 {k} {x / 1024} {y / 1024})"', m.group(0).split(">")[0])
         s = s.replace("&", "&amp;").replace("<", "&lt;")
         return f'{head} xml:space="preserve">{s}</text>'
 
@@ -75,12 +83,13 @@ def main():
         binary = tmp / "render"
         subprocess.run([args.cxx, "-std=c++11", "-O1", "-I", str(pathlib.Path(args.sdk) / "sdk/include"), "-I", str(ROOT),
                         str(ROOT / "tools/screens/render.cpp"), "-o", str(binary)], check=True)
-        for name, page, lane in PAGES:
-            dump = subprocess.run([str(binary), str(page), str(lane)], check=True, capture_output=True, text=True).stdout
+        for name, page, lane, states in PAGES:
+            dump = subprocess.run([str(binary), str(page), str(lane)] + states, check=True, capture_output=True,
+                                  text=True).stdout
             html = tmp / f"{name}.html"
             html.write_text(f'<!doctype html><meta charset="utf-8"><style>{style}</style>{frame_svg(art, dump)}')
             screenshot(html, docs / f"{name}.png", 480, 220)
-        images = "".join(f'<img src="{(docs / f"{name}.png").as_uri()}">' for name, _, _ in PAGES)
+        images = "".join(f'<img src="{(docs / f"{name}.png").as_uri()}">' for name, _, _, _ in PAGES[:4])
         grid = tmp / "grid.html"
         grid.write_text("<!doctype html><style>html,body{margin:0;background:#1a1a1a}"
                         "div{display:grid;grid-template-columns:480px 480px;gap:8px;padding:8px}"

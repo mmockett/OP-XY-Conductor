@@ -22,6 +22,7 @@ enum Page { kConduct, kLane, kDetail, kRoute, kPages };
 static const char* const kPageNames[kPages] = {"conductor", "lanes", "lane", "route"};
 
 static const char* const kNoteNames[12] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+static const char* const kFlatNames[12] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
 static const u8 kScales[7][7] = {
     {0, 2, 4, 5, 7, 9, 11}, {0, 2, 3, 5, 7, 8, 10}, {0, 2, 3, 5, 7, 9, 10}, {0, 1, 3, 5, 7, 8, 10},
     {0, 2, 4, 6, 7, 9, 11}, {0, 2, 4, 5, 7, 9, 10}, {0, 2, 3, 5, 7, 8, 11}};
@@ -134,7 +135,15 @@ inline i32 degree_semitones(i32 key, i32 scale, i32 degree) {
     return key + kScales[scale][degree - octave * 7] + 12 * octave;
 }
 
-// "Am7", "F#dim", "Cmaj7": the chord on `degree`, at most 7 characters.
+// A key's spelling: flats where its scale has Eb, Ab or Bb and no F# (C minor,
+// F major), sharps otherwise.
+inline const char* const* note_names(i32 key, i32 scale) {
+    u32 pcs = 0;
+    for (i32 d = 0; d < 7; ++d) pcs |= 1u << static_cast<u32>(degree_semitones(key, scale, d) % 12);
+    return pcs & (1u << 3 | 1u << 8 | 1u << 10) && !(pcs & 1u << 6) ? kFlatNames : kNoteNames;
+}
+
+// "Am7", "F#dim", "Abmaj7": the chord on `degree`, at most 7 characters.
 inline void chord_name(char* out, i32 key, i32 scale, i32 degree, bool seventh) {
     const i32 r = degree_semitones(key, scale, degree);
     const i32 t3 = degree_semitones(key, scale, degree + 2) - r, t5 = degree_semitones(key, scale, degree + 4) - r;
@@ -146,7 +155,7 @@ inline void chord_name(char* out, i32 key, i32 scale, i32 degree, bool seventh) 
         else if (t5 == 6) quality = t7 == 9 ? "dim7" : "m7b5";
     }
     u32 n = 0;
-    for (const char* c = kNoteNames[((r % 12) + 12) % 12]; *c; ++c) out[n++] = *c;
+    for (const char* c = note_names(key, scale)[((r % 12) + 12) % 12]; *c; ++c) out[n++] = *c;
     for (const char* c = quality; *c && n < 7; ++c) out[n++] = *c;
     out[n] = 0;
 }

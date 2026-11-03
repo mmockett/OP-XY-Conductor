@@ -148,18 +148,53 @@ static void turn_once(u32 slot, i16 direction) {
 
 static const u32* shown() { return reinterpret_cast<const u32*>(overlay.display); }
 
-// M2's words mark each lane's notes, and only those; M3's put the selected
-// lane's notes on rows inside the range it labels.
+// Whether a lane starts or holds a note anywhere in steps [first, last).
+static bool sounds(const Bar& bar, u32 lane, u32 first, u32 last) {
+    for (u32 i = 0; i < bar.count; ++i) {
+        const Event& e = bar.events[i];
+        const u32 start = e.tick, end = e.tick + e.length;
+        if (e.lane == lane && start < last * kTicks && end > first * kTicks) return true;
+    }
+    return false;
+}
+
+// M1's words mark every beat of the phrase that sounds, and only those; M2's
+// every step; M3's put the selected lane's notes on rows inside the range it
+// labels; M4's carry each lane's range and transpose.
 static void playing_pages() {
     const u32 at = 2 * kBarTicks;
-    input.page_key = kLane + 1;
+    input.page_key = kConduct + 1;
     tick(at, true);
-    Words expected = {};
-    for (u32 i = 0; i < state.current.count; ++i)
-        set_bit(expected, kHits, state.current.events[i].lane * kSteps + state.current.events[i].tick / kTicks);
-    bool same = state.current.count > 0;
-    for (u32 i = 0; i < 4; ++i) same = same && shown()[kHits + i] == expected.v[kHits + i];
-    check(same, "M2 marks every lane's notes in their steps and nothing else");
+    static Bar bar;
+    bool beats = true, many = true;
+    for (u32 b = 0; b < kPhrase; ++b) {
+        generate(state.song, state.globals, static_cast<i32>(b), bar);
+        for (u32 l = 0; l < kLanes; ++l)
+            for (u32 q = 0; q < 4; ++q) {
+                const u32 cell = phrase_cell(shown(), l, 4 * b + q);
+                beats = beats && (cell != kCellRest) == sounds(bar, l, 4 * q, 4 * q + 4);
+                u32 starts = 0;
+                for (u32 i = 0; i < bar.count; ++i)
+                    starts += bar.events[i].lane == l && bar.events[i].tick / kTicks / 4 == q;
+                many = many && (cell == kCellMany) == (starts >= 3);
+            }
+    }
+    check(beats, "M1 marks each beat of the phrase a lane sounds in, and no other");
+    check(many, "M1 marks a beat that starts three or more notes as full");
+
+    input.page_key = kLane + 1;
+    tick(at + 1, true);
+    bool steps = state.current.count > 0;
+    for (u32 l = 0; l < kLanes; ++l)
+        for (u32 s = 0; s < kSteps; ++s) {
+            const u32 cell = bits_at(shown(), kStepCells, 2 * (l * kSteps + s), 2);
+            const bool drum = state.song.lanes[l].main[kRoleSlot] == kDrum;
+            bool starts = false;
+            for (u32 i = 0; i < state.current.count; ++i)
+                starts = starts || (state.current.events[i].lane == l && state.current.events[i].tick / kTicks == s);
+            steps = steps && (drum ? (cell != kDrumNone) == starts : (cell != kCellRest) == sounds(state.current, l, s, s + 1));
+        }
+    check(steps, "M2 marks each step a lane sounds in, and no other");
 
     input.page_key = kDetail + 1;
     i32 margins[2] = {0, 0}, bands[2] = {0, 0};
@@ -186,7 +221,23 @@ static void playing_pages() {
     }
     check(bands[0] == 1 && margins[0] >= -1 && margins[0] <= 1, "M3 centres a lane inside an octave on semitone rows");
     check(bands[1] > 1, "M3 widens its rows for a lane wider than twelve semitones");
-    tick(at + 3, false);
+
+    input.page_key = kRoute + 1;
+    state.song.lanes[6].route[kLow] = 40;
+    state.song.lanes[6].route[kHigh] = 91;
+    state.song.lanes[6].route[kXpose] = -24;
+    state.song.lanes[7].route[kXpose] = 24;
+    tick(at + 3, true);
+    bool ranges = true;
+    for (u32 l = 0; l < kLanes; ++l) {
+        const u32 r = lane_range(shown(), l);
+        const Lane& lane = state.song.lanes[l];
+        ranges = ranges && static_cast<i32>(field(r, 0, 7)) == lane.route[kLow] &&
+                 static_cast<i32>(field(r, 7, 7)) == lane.route[kHigh] &&
+                 static_cast<i32>(field(r, 14, 6)) - 24 == lane.route[kXpose];
+    }
+    check(ranges, "M4 carries every lane's range and transpose");
+    tick(at + 4, false);
 }
 
 static void controlling() {

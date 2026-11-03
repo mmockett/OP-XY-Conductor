@@ -20,6 +20,9 @@ struct ControlState {
     Globals globals;
     u32 flash_us[kLanes];
     Bar current;
+    i32 phrase_at;      // the phrase `phrase` describes
+    u32 phrase_stale;   // 1 when the song or the controls changed since
+    PhraseCells phrase; // M1's beats and groove
 };
 
 inline void control_reset(ControlState& state) {
@@ -34,6 +37,8 @@ inline void control_reset(ControlState& state) {
     state.next_tick = 0;
     state.bar = 0;
     state.generated = 0;
+    state.phrase_at = 0;
+    state.phrase_stale = 1;
     for (u32 l = 0; l < kLanes; ++l) state.flash_us[l] = 0;
 }
 
@@ -57,6 +62,7 @@ inline void control_load(ControlState& state, const u8* data, u32 bytes) {
     }
     state.saved = kSaved;
     state.dirty = 1;
+    state.phrase_stale = 1;
 }
 
 inline Lane& selected(ControlState& state) { return state.song.lanes[state.lane]; }
@@ -92,6 +98,7 @@ inline void act(ControlState& state, u32 action, i32 direction) {
 
 inline void turn(ControlState& state, u32 slot, i32 direction, bool shift) {
     state.dirty = 1;
+    state.phrase_stale = 1;
     if (shift) {
         act(state, slot % 4, direction);
         return;
@@ -151,6 +158,7 @@ inline void advance(ControlState& state, const opxy::Transport& transport, opxy:
 }
 
 inline void control(ControlState& state, const opxy::control::Input& input, opxy::control::Overlay& overlay) {
+    if (state.dirty) state.phrase_stale = 1;
     Globals globals;
     bool changed = false;
     for (u32 i = 0; i < kGlobals; ++i) {
@@ -160,6 +168,7 @@ inline void control(ControlState& state, const opxy::control::Input& input, opxy
     if (changed) {
         state.globals = globals;
         state.dirty = 1;
+        state.phrase_stale = 1;
     }
     if (input.page_key >= 1 && input.page_key <= kPages) state.page = static_cast<u8>(input.page_key - 1);
     for (u32 i = 0; i < input.turn_count; ++i) turn(state, input.turns[i].slot, input.turns[i].direction, input.shift != 0);
@@ -170,12 +179,21 @@ inline void control(ControlState& state, const opxy::control::Input& input, opxy
     // Stopped, the song waits at its start whatever the transport's ticks
     // read, so nothing moves or evolves until play.
     const Position at = {input.transport.playing ? input.transport.ticks96 : 0u, input.transport.playing != 0};
-    ensure(state, static_cast<i32>(at.tick / kBarTicks));
+    const i32 bar = static_cast<i32>(at.tick / kBarTicks);
+    // M1 draws the whole phrase: four bars' generation, borrowing `current`,
+    // once a phrase or after a change.
+    if (state.page == kConduct && (state.phrase_stale || state.phrase_at != phrase_of(bar))) {
+        phrase_cells(state.song, state.globals, phrase_of(bar), state.current, state.phrase);
+        state.phrase_at = phrase_of(bar);
+        state.phrase_stale = 0;
+        state.generated = 0;
+    }
+    ensure(state, bar);
     overlay.own_turns = state.page != kConduct || input.shift;
 
     Words w;
     words(state.song, state.page, state.lane, state.current, state.bar, at, input.shift != 0, state.flash_us,
-          state.globals, w);
+          state.globals, state.phrase, w);
     for (u32 i = 0; i < kWords; ++i) overlay.display[i] = static_cast<i32>(w.v[i]);
 }
 }

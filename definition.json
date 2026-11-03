@@ -173,12 +173,12 @@
       "stateAlignment": 4,
       "paths": 0,
       "points": 0,
-      "nodes": 234,
+      "nodes": 218,
       "texts": 32,
       "palette": 16
     },
     "trackControl": {
-      "stateBytes": 2192,
+      "stateBytes": 2236,
       "stateAlignment": 4,
       "unique": true,
       "aux": [
