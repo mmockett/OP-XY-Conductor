@@ -254,10 +254,17 @@ inline void bar_lines(Frame& frame) {
 }
 
 // One cell from the pool, or none once it is spent.
+// M1 and M2 give each lane's beat or step its own cell (8 x 16, the whole
+// pool), so a bar or beat changes only the cells whose marks change. M3 and
+// M4 take cells in order up to `end`; M4 keeps the last ones for the selected
+// lane, so turning its range moves only its own.
 struct Cells {
-    u32 next;
+    u32 next, end;
     void put(Frame& frame, i32 x, i32 y, u32 shade, i32 scale) {
-        if (next < kCellCount) show(frame, kCells + next++, x, y, shade, scale);
+        if (next < end) show(frame, kCells + next++, x, y, shade, scale);
+    }
+    static void at(Frame& frame, u32 lane, u32 slot, i32 x, i32 y, u32 shade, i32 scale) {
+        show(frame, kCells + lane * kSteps + slot, x, y, shade, scale);
     }
 };
 
@@ -345,14 +352,13 @@ inline void draw_conduct(const Input& input, const View& v, Frame& frame) {
 
     // Each lane's beats.
     static const i32 kSizes[4] = {0, 512, 1024, 1434};
-    Cells cells = {0};
     for (u32 l = 0; l < kLanes; ++l) {
         if (v.role(l) == kOff) continue;
         for (u32 b = 0; b < 16; ++b) {
             const u32 c = phrase_cell(w, l, b);
             if (!c) continue;
             const u32 shade = time_shade(v, l, b < now_beat, b == now_beat, b / 4 == v.bar);
-            cells.put(frame, kLeft + kBeat * static_cast<i32>(b) + kBeat / 2, row_y(l), shade, kSizes[c]);
+            Cells::at(frame, l, b, kLeft + kBeat * static_cast<i32>(b) + kBeat / 2, row_y(l), shade, kSizes[c]);
         }
     }
 
@@ -383,7 +389,6 @@ inline void draw_lanes(const View& v, Frame& frame) {
     }
     static const i32 kSizes[4] = {0, 614, 922, 1434};
     static const i32 kDrumY[4] = {0, -3584, 0, 3584};  // high, middle, low: +-3.5 px
-    Cells cells = {0};
     for (u32 l = 0; l < kLanes; ++l) {
         if (v.role(l) == kOff) continue;
         const bool drum = v.role(l) == kDrum;
@@ -392,8 +397,8 @@ inline void draw_lanes(const View& v, Frame& frame) {
             if (!c) continue;
             const u32 shade = time_shade(v, l, s < v.step, s == v.step, true);
             const i32 x = kLeft + kBeat * static_cast<i32>(s) + kBeat / 2;
-            if (drum) cells.put(frame, x, row_y(l) + kDrumY[c], shade, 512);
-            else cells.put(frame, x, row_y(l), shade, kSizes[c]);
+            if (drum) Cells::at(frame, l, s, x, row_y(l) + kDrumY[c], shade, 512);
+            else Cells::at(frame, l, s, x, row_y(l), shade, kSizes[c]);
         }
     }
 }
@@ -467,7 +472,7 @@ inline void draw_roll(const Input& input, const View& v, Frame& frame) {
     }
     show(frame, kStepBand, kLeft + kBeat * static_cast<i32>(v.step), px(63), kRow);
     bar_lines(frame);
-    Cells cells = {0};
+    Cells cells = {0, kCellCount};
     for (u32 r = 0; r < rows; ++r)
         for (u32 s = 0; s < kSteps; ++s) {
             if (!bit(w, kRoll, r * kSteps + s)) continue;
@@ -478,7 +483,7 @@ inline void draw_roll(const Input& input, const View& v, Frame& frame) {
 }
 
 // M4: each lane's range on a keyboard from C1 to C7, in dashes, moved by its
-// transpose (a faint copy marks where it was), and wired to its track. The
+// transpose (faint marks show where it was), and wired to its track. The
 // MIDI column says it can't play yet.
 inline void draw_route(const View& v, Frame& frame) {
     const u32* w = v.w;
@@ -494,25 +499,37 @@ inline void draw_route(const View& v, Frame& frame) {
         show(frame, kGridLines + i, x, px(63), kGrid);
         centred(frame, kMidText + i, x, px(51), kOctaves[i], 11, unit * 9 / 11);
     }
-    Cells cells = {0};
+    // A range takes at most 15 dashes and two marks.
+    const u32 kept = 17;
+    Cells others = {0, kCellCount - kept}, own = {kCellCount - kept, kCellCount};
     for (u32 l = 0; l < kLanes; ++l) {
         if (v.role(l) == kOff) continue;
+        Cells& cells = l == v.selected ? own : others;
         const u32 r = lane_range(w, l);
         const i32 low = static_cast<i32>(field(r, 0, 7)), high = static_cast<i32>(field(r, 7, 7));
         const i32 xpose = static_cast<i32>(field(r, 14, 6)) - 24;
         const bool sel = l == v.selected, muted = v.muted(l);
-        for (u32 pass = xpose ? 0u : 1u; pass < 2; ++pass) {
-            const i32 lo = clampi(low + (pass ? xpose : 0), lowest, highest), hi = clampi(high + (pass ? xpose : 0), lowest, highest);
+        if (xpose) {
+            // Where the range was before its transpose: a faint upright mark at each end.
+            const i32 marks[2] = {clampi(low, lowest, highest), clampi(high, lowest, highest)};
+            for (u32 m = 0; m < 2; ++m) {
+                const u32 node = kCells + cells.next;
+                cells.put(frame, Key::x(marks[m], x0, width), row_y(l), kDim, unit);
+                opxy::draw::turn(frame, node, Turn{0, unit});
+            }
+        }
+        {
+            const i32 lo = clampi(low + xpose, lowest, highest), hi = clampi(high + xpose, lowest, highest);
             if (hi <= lo) continue;
             const i32 a = Key::x(lo, x0, width), b = Key::x(hi, x0, width), dash = px(18);
-            const u32 shade = !pass ? kRingRule : sel ? kWhite : muted ? kMuted : kDim;
+            const u32 shade = sel ? kWhite : muted ? kMuted : kDim;
             // Dashes 18 px long, evenly spread so the last ends at the top.
             const i32 count = b - a <= dash ? 1 : (b - a - dash + px(20) - 1) / px(20) + 1;
             for (i32 k = 0; k < count; ++k) {
                 const i32 x = count == 1 ? (a + b) / 2 : a + dash / 2 + (b - a - dash) / (count - 1) * k;
                 cells.put(frame, x, row_y(l), shade, 1536);
             }
-            if (pass && sel) {
+            if (sel) {
                 // The range's own notes, though the keyboard stops at C1 and C7.
                 char note[8];
                 note_name(note, clampi(low + xpose, 0, 127));
