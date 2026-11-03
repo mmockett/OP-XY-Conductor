@@ -52,14 +52,13 @@ two bars of each phrase in the middle, and plays every bar in a busy one.
 
 ## What you need
 
-Conductor uses SDK features that are not in `staging` yet; open-xy
-[#345](https://github.com/etcetc000/open-xy/issues/345) tracks them:
-
-- Track control ([#198](https://github.com/etcetc000/open-xy/pull/198)) and
-  machines on track 12 ([#234](https://github.com/etcetc000/open-xy/pull/234)),
-  so `machine.json` declares `"sdk": "1.8"`.
-- Track-control notes, the machine's own encoders and sixteen display words
-  ([`sdk/control-notes`](https://github.com/mmockett/open-xy/tree/sdk/control-notes)).
+Conductor targets SDK 1.9 (`"sdk": "1.9"` in `machine.json`). Track control
+and machines on track 12 are in `staging`
+([#360](https://github.com/etcetc000/open-xy/pull/360)). It also needs what
+open-xy [#346](https://github.com/etcetc000/open-xy/pull/346) adds and
+[#345](https://github.com/etcetc000/open-xy/issues/345) tracks: track-control
+notes, the machine's own encoder turns and sixteen display words
+([`sdk/control-notes`](https://github.com/mmockett/open-xy/tree/sdk/control-notes)).
 
 ## Development
 

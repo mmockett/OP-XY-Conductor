@@ -318,6 +318,19 @@ static void controlling() {
     tick(kBarTicks + 40, false);
     check(state.playing == 0, "stopping ends playback");
 
+    // Muted (track 12's own mute), the song moves on but plays and lights nothing.
+    input.muted = 1;
+    for (u32 l = 0; l < kLanes; ++l) state.flash_us[l] = 0;
+    bool silent = true;
+    for (u32 t = 2 * kBarTicks; t < 3 * kBarTicks; t += 5) {
+        tick(t, true);
+        silent = silent && overlay.note_count == 0;
+    }
+    for (u32 l = 0; l < kLanes; ++l) silent = silent && state.flash_us[l] == 0;
+    check(silent && state.next_tick >= 3 * kBarTicks - 5, "muted, the song moves on but plays and lights nothing");
+    input.muted = 0;
+    tick(3 * kBarTicks, false);
+
     // Starting again later in the song plays from there, not what it skipped.
     static Bar later;
     generate(state.song, g, 1, later);

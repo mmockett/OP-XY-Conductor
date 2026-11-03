@@ -128,17 +128,18 @@ inline void ensure(ControlState& state, i32 bar) {
     state.dirty = 0;
 }
 
-inline void play(ControlState& state, const Event& e, u32 tick_us, opxy::control::Overlay& overlay) {
+inline void play(ControlState& state, const Event& e, u32 tick_us, bool muted, opxy::control::Overlay& overlay) {
     const Lane& lane = state.song.lanes[e.lane];
-    if (lane.route[kMute]) return;
+    if (lane.route[kMute] || muted) return;
     const u32 us = e.length * tick_us;
     opxy::control::play(overlay, static_cast<u32>(lane.route[kTargetSlot]), e.pitch, e.velocity,
                         us < opxy::control::longest_note_us ? us : opxy::control::longest_note_us);
     state.flash_us[e.lane] = kFlashUs;
 }
 
-// Plays every note whose tick has come since the last call.
-inline void advance(ControlState& state, const opxy::Transport& transport, opxy::control::Overlay& overlay) {
+// Plays every note whose tick has come since the last call; while track 12 is
+// muted the song moves on silently, as the SDK would drop its notes.
+inline void advance(ControlState& state, const opxy::Transport& transport, bool muted, opxy::control::Overlay& overlay) {
     const u32 now = transport.ticks96;
     if (!transport.playing) {
         state.playing = 0;
@@ -154,7 +155,7 @@ inline void advance(ControlState& state, const opxy::Transport& transport, opxy:
         const u32 end = now < last ? now : last;
         for (u32 i = 0; i < state.current.count; ++i) {
             const u32 t = start + state.current.events[i].tick;
-            if (t >= state.next_tick && t <= end) play(state, state.current.events[i], tick_us, overlay);
+            if (t >= state.next_tick && t <= end) play(state, state.current.events[i], tick_us, muted, overlay);
         }
         state.next_tick = end + 1;
     }
@@ -178,7 +179,7 @@ inline void control(ControlState& state, const opxy::control::Input& input, opxy
     for (u32 l = 0; l < kLanes; ++l)
         state.flash_us[l] = state.flash_us[l] > input.elapsed_us ? state.flash_us[l] - input.elapsed_us : 0;
 
-    advance(state, input.transport, overlay);
+    advance(state, input.transport, input.muted != 0, overlay);
     // Stopped, the song waits at its start whatever the transport's ticks
     // read, so nothing moves or evolves until play.
     const Position at = {input.transport.playing ? input.transport.ticks96 : 0u, input.transport.playing != 0};

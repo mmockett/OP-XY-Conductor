@@ -2,11 +2,6 @@
   "schema": 1,
   "id": "conductor",
   "name": "Conductor",
-  "hidePages": [
-    "envelope",
-    "filter",
-    "lfo"
-  ],
   "parameters": [
     {
       "id": "key",
