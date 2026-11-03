@@ -92,8 +92,8 @@ need the OP-XY's screen font, which is never committed here.
   32 it may. A GUI stall of a second plays the notes it held back at once and
   drops past 32. On the device (120 bpm, recorded) notes started 0-17 ms
   after the grid, 5 ms at the median: one 60 Hz GUI tick, as on the host.
-- M1-M4 are polled each GUI tick, so a press shorter than one tick can be
-  missed.
+- M1-M4 arrive as key presses, at most one a GUI tick: two presses within
+  one tick (about 17 ms) keep only the last.
 - Lanes play instrument tracks 1-8 only. M4 shows MIDI channels 1-8 beside
   the tracks, but they can't be chosen yet: a machine's notes reach only
   tracks 1-8's own machines until the SDK can send them over MIDI.
