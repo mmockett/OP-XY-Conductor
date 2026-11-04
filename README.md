@@ -20,6 +20,8 @@ instrument tracks 1-8 while the sequencer runs.
 
 **Status:** experimental. It runs on an OP-XY on OS 1.2.1 with a development
 build of the SDK (see [What you need](#what-you-need)), not on stock firmware.
+It isn't in the Open-XY catalog or the open-xy.com builder: build it from
+source.
 
 ## Using it
 
@@ -48,9 +50,13 @@ Conductor uses SDK features that are not in `staging` yet; open-xy
 
 - Track control ([#198](https://github.com/etcetc000/open-xy/pull/198)) and
   machines on track 12 ([#234](https://github.com/etcetc000/open-xy/pull/234)),
-  so `machine.json` declares `"sdk": "1.8"`.
+  so `machine.json` declares `"sdk": "1.8"`. Both pull requests have closed;
+  their work reached `staging` as SDK 1.9 in
+  [#360](https://github.com/etcetc000/open-xy/pull/360).
 - Track-control notes, the machine's own encoders and sixteen display words
   ([`sdk/control-notes`](https://github.com/mmockett/open-xy/tree/sdk/control-notes)).
+  It merged as [#346](https://github.com/etcetc000/open-xy/pull/346) and was
+  reverted, and is open again as [#378](https://github.com/etcetc000/open-xy/pull/378).
 
 ## Development
 
