@@ -20,6 +20,8 @@ instrument tracks 1-8 while the sequencer runs.
 
 **Status:** experimental. It runs on an OP-XY on OS 1.2.1 with a development
 build of the SDK (see [What you need](#what-you-need)), not on stock firmware.
+It isn't in the Open-XY catalog or the open-xy.com builder: build it from
+source.
 
 ## Using it
 
@@ -55,10 +57,11 @@ two bars of each phrase in the middle, and plays every bar in a busy one.
 Conductor targets SDK 1.9 (`"sdk": "1.9"` in `machine.json`). Track control
 and machines on track 12 are in `staging`
 ([#360](https://github.com/etcetc000/open-xy/pull/360)). It also needs what
-open-xy [#346](https://github.com/etcetc000/open-xy/pull/346) adds and
-[#345](https://github.com/etcetc000/open-xy/issues/345) tracks: track-control
-notes, the machine's own encoder turns and sixteen display words
+open-xy [#345](https://github.com/etcetc000/open-xy/issues/345) tracks:
+track-control notes, the machine's own encoder turns and sixteen display words
 ([`sdk/control-notes`](https://github.com/mmockett/open-xy/tree/sdk/control-notes)).
+That merged as [#346](https://github.com/etcetc000/open-xy/pull/346), was
+reverted, and is open again as [#378](https://github.com/etcetc000/open-xy/pull/378).
 
 ## Development
 
