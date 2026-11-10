@@ -281,6 +281,18 @@ static void controlling() {
     turn_once(kRoleSlot, 1);
     tick(0, false);
     check(state.song.lanes[1].main[kRoleSlot] == kChord, "encoder 2 steps the lane's role");
+    // A fast turn (several detents) still picks one lane and one role at a time.
+    turn_once(0, 3);
+    tick(0, false);
+    check(state.lane == 2, "a fast turn moves one lane");
+    turn_once(0, -3);
+    tick(0, false);
+    check(state.lane == 1, "a fast turn back moves one lane");
+    turn_once(kRoleSlot, -4);
+    tick(0, false);
+    check(state.song.lanes[1].main[kRoleSlot] == kChord - 1, "a fast turn steps one role");
+    turn_once(kRoleSlot, 1);
+    tick(0, false);
     input.page_key = 2;
     tick(0, false);
     check(state.page == kLane, "M2 again stays on the lanes page");
