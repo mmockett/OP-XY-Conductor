@@ -69,8 +69,13 @@ inline void control_load(ControlState& state, const u8* data, u32 bytes) {
 
 inline Lane& selected(ControlState& state) { return state.song.lanes[state.lane]; }
 
+// A turn's direction carries its detents (SDK 1.11): a fast turn moves a
+// number several steps, but a choice, a lane or a role one at a time.
+inline i32 one(i32 direction) { return direction > 0 ? 1 : direction < 0 ? -1 : 0; }
+inline bool picks(const Spec& s) { return s.format == kChoice || s.format == kTarget || s.format == kLaneNumber; }
+
 inline i8 stepped(i8 value, const Spec& s, i32 direction) {
-    return static_cast<i8>(clampi(value + direction, s.minimum, s.maximum));
+    return static_cast<i8>(clampi(value + (picks(s) ? one(direction) : direction), s.minimum, s.maximum));
 }
 
 // Shift + encoder: every lane on M1, the selected lane elsewhere.
@@ -93,8 +98,8 @@ inline void act(ControlState& state, u32 action, i32 direction) {
         else lane.fill = static_cast<u8>(clampi(lane.fill + 5 * direction, 0, 100));
         break;
     default:
-        if (all) song.variation = static_cast<u8>(clampi(song.variation + direction, 0, 3));
-        else lane.variation = static_cast<u8>(clampi(lane.variation + direction, 0, 3));
+        if (all) song.variation = static_cast<u8>(clampi(song.variation + one(direction), 0, 3));
+        else lane.variation = static_cast<u8>(clampi(lane.variation + one(direction), 0, 3));
     }
 }
 
@@ -108,12 +113,13 @@ inline void turn(ControlState& state, u32 slot, i32 direction, bool shift) {
     Lane& lane = selected(state);
     const u32 role = static_cast<u32>(lane.main[kRoleSlot]);
     if ((state.page == kLane || state.page == kRoute) && slot == 0) {
-        state.lane = static_cast<u8>(clampi(state.lane + direction, 0, kLanes - 1));
+        state.lane = static_cast<u8>(clampi(state.lane + one(direction), 0, kLanes - 1));
         return;
     }
     const Spec& s = spec(state.page, slot, role);
     if (s.format == kBlank) return;
-    if (state.page == kLane && slot == kRoleSlot) set_role(lane, static_cast<u32>(stepped(lane.main[slot], s, direction)));
+    if (state.page == kLane && slot == kRoleSlot)
+        set_role(lane, static_cast<u32>(clampi(lane.main[slot] + one(direction), s.minimum, s.maximum)));
     else if (state.page == kLane) lane.main[slot] = stepped(lane.main[slot], s, direction);
     else if (state.page == kRoute) lane.route[slot] = stepped(lane.route[slot], s, direction);
     else lane.detail[role - 1][slot] = stepped(lane.detail[role - 1][slot], s, direction);

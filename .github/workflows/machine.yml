@@ -6,11 +6,9 @@ on:
 permissions:
   contents: read
 env:
-  # Conductor needs track-control notes (etcetc000/open-xy#378), not yet in
-  # staging: build on its branch until it merges, then go back to
-  # etcetc000/open-xy staging.
-  OPEN_XY_REPO: mmockett/open-xy
-  OPEN_XY_REF: sdk/control-notes-2
+  # Development follows staging; pin a compatible SDK commit for a release.
+  OPEN_XY_REPO: etcetc000/open-xy
+  OPEN_XY_REF: staging
 jobs:
   machine:
     runs-on: ubuntu-latest
