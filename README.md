@@ -18,10 +18,9 @@ instrument tracks 1-8 while the sequencer runs.
   sequencer plays; nothing is written into the tracks' steps. Stopped, the song
   waits at its start.
 
-**Status:** experimental. It runs on an OP-XY on OS 1.2.1 with a development
-build of the SDK (see [What you need](#what-you-need)), not on stock firmware.
-It isn't in the Open-XY catalog or the open-xy.com builder: build it from
-source.
+**Status:** v1.0.0. Conductor runs on an OP-XY on OS 1.2.1, in a firmware
+built with the [Open-XY SDK](https://github.com/etcetc000/open-xy) at SDK 1.11
+or later (see [Building](#building)).
 
 ## Using it
 
@@ -52,19 +51,24 @@ Night (A minor, sparse, slow chords) and Jazz (F major, swung, rich chords).
 The arp follows the song's density: it rests in a sparse song, lifts the last
 two bars of each phrase in the middle, and plays every bar in a busy one.
 
-## What you need
+## Building
 
-Conductor targets SDK 1.11 (`"sdk": "1.11"` in `machine.json`): track control
-playing notes on tracks 1-8, the machine's own encoder turns and sixteen
-display words, from open-xy
-[#378](https://github.com/etcetc000/open-xy/pull/378). Track control and
-machines on track 12 came in SDK 1.9
-([#360](https://github.com/etcetc000/open-xy/pull/360)).
+Conductor needs the Open-XY SDK at version 1.11 or later, on its `staging`
+branch: track control on aux track 12 (SDK 1.9), and with it notes played on
+tracks 1-8, the machine's own encoder turns and sixteen words for its display
+(SDK 1.11).
+
+```sh
+python ../open-xy/sdk.py test --machine .                          # records, preview and the host checks
+python ../open-xy/sdk.py compile --machine . --out <new folder>    # the Blackfin compile
+```
+
+A firmware for the OP-XY comes from `sdk.py build`, with your own stock OS
+([building firmware](https://github.com/etcetc000/open-xy/blob/staging/docs/build.md)).
 
 ## Development
 
 ```sh
-python ../open-xy/sdk.py test --machine .
 python tools/artwork.py   # after changing a node's shape or slot
 XY_FONT=/path/to/UniversNextPro-Light.ttf python tools/screens/screens.py --sdk ../open-xy   # docs/ screenshots
 c++ -std=c++11 -O2 -I ../open-xy/sdk/include -I . tools/timing/timing.cpp -o /tmp/timing && /tmp/timing   # note timing on GUI ticks
@@ -80,8 +84,7 @@ python tools/timing/onsets.py recording.wav --bpm 120   # note timing on the dev
 - `tools/timing/`: how late notes start on GUI ticks, on the host and from a
   recording of the device.
 
-The engine is silent: Conductor plays other tracks' machines. The screenshots
-need the OP-XY's screen font, which is never committed here.
+The screenshots need the OP-XY's screen font, which is never committed here.
 
 ## Limits
 
@@ -99,3 +102,14 @@ need the OP-XY's screen font, which is never committed here.
   the tracks, but they can't be chosen yet: a machine's notes reach only
   tracks 1-8's own machines until the SDK can send them over MIDI.
 - M3 shows the current bar, not the whole phrase.
+
+## CPU
+
+Conductor's engine renders silence: it plays the other tracks' machines. Its
+own work (the song, its notes and its pages) runs once a GUI tick on the
+OP-XY's GUI side, outside the audio block, so the audio block carries only its
+silent voice.
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).
